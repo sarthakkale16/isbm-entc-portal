@@ -1,14 +1,179 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdn.tailwindcss.com"></script>
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
+    <title>ISB&M ENTC Department</title>
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. Load React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- 3. Load Babel to translate JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+    <!-- 4. Your React App Code -->
+    <script type="text/babel">
+        // --- MOCK DATABASE ---
+        const mockData = {
+            toppers: [
+                { id: 1, name: 'Priya Sharma', batch: '2024', achievement: 'University Rank 1', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=PS', details: 'Priya secured the top position in the university with a GPA of 9.8. She excelled in subjects like VLSI Design and Wireless Communication.' },
+                { id: 2, name: 'Amit Singh', batch: '2023', achievement: 'Gold Medalist', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=AS', details: 'Amit was awarded the Gold Medal for his outstanding final year project on embedded systems for agriculture.' },
+            ],
+            achievements: [ { id: 1, title: 'Smart India Hackathon 2023', description: 'Our team won the first prize in the software edition.', details: 'A team of four students from the ENTC department developed a solution for waste management using AI and IoT, securing the top spot among 500+ teams.' }, ],
+            faculty: [
+                { id: 1, name: 'Dr. R. K. Gupta', designation: 'Head of Department', qualification: 'Ph.D. (IIT Bombay)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=RG', email: 'rk.gupta@isbm.ac.in', specializations: 'Wireless Communication, 5G Networks', bio: 'Dr. R. K. Gupta has over 20 years of experience in academia and research.' },
+                { id: 2, name: 'Prof. S. B. Patil', designation: 'Professor', qualification: 'M.Tech (Signal Processing)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=SP', email: 'sb.patil@isbm.ac.in', specializations: 'Digital Signal Processing, Image Processing', bio: 'Prof. S. B. Patil is an expert in signal processing algorithms.' },
+            ],
+            students: [ { id: 1, name: 'Sarthak Deshmukh', email: 'sarthak@example.com', batch: '2025', achievements: 'Class Representative, Topper in Semester 3.' }, ],
+            placementStats: { highestPackage: '18 LPA', averagePackage: '6.5 LPA' },
+            galleryImages: [ { id: 1, url: 'https://placehold.co/500x300/A5B4FC/FFFFFF?text=Workshop', caption: 'Robotics Workshop' }, { id: 2, url: 'https://placehold.co/500x400/A5B4FC/FFFFFF?text=Tech+Fest', caption: 'Annual Tech Fest' }, ],
+            clubs: [ { id: 1, name: 'Robotics Club', description: 'A community for students passionate about building and programming robots.', head: 'Aisha Khan', activities: 'Workshops on Arduino and Raspberry Pi.' }, ],
+            projects: [ { id: 1, title: 'IoT Based Smart Home', description: 'A project to control home appliances using a web interface.', imageUrl: 'https://placehold.co/600x400/3B82F6/FFFFFF?text=IoT+Project', team: 'Amit, Priya, Sneha', technologies: 'Raspberry Pi, Python, React' }, ],
+            publications: [ { id: 1, title: 'A Novel Approach to 5G Antenna Design', authors: 'Dr. R. K. Gupta, S. B. Patil', journal: 'IEEE Transactions on Antennas', year: '2023', abstract: 'This paper presents a novel microstrip patch antenna design for 5G communication systems...' }, ]
+        };
+
+        const AppContext = React.createContext();
+
+        const Header = () => (
+            <header className="bg-gray-800 p-4 shadow-md text-center border-b border-gray-700">
+                <h1 className="text-4xl font-bold text-white">ISBM College of Engineering</h1>
+                <h3 className="text-2xl font-semibold text-gray-300 mt-1">Department of Electronics and Telecommunication</h3>
+            </header>
+        );
+
+        const Navigation = () => {
+            const { currentPage, setCurrentPage, user, setShowLogin } = React.useContext(AppContext);
+            const navItems = ['Home', 'Toppers', 'Achievements', 'Faculty', 'Placements', 'Gallery', 'Clubs', 'Projects', 'Publications', 'Contact'];
+            return (
+                <nav className="bg-gray-800 text-gray-200 sticky top-0 z-40">
+                    <div className="container mx-auto px-4">
+                        <div className="flex justify-between items-center">
+                            <div className="flex flex-wrap">
+                                {navItems.map(item => (
+                                    <button key={item} onClick={() => setCurrentPage(item)} className={`py-4 px-2 font-medium transition duration-300 ${currentPage === item ? 'text-blue-400 border-b-4 border-blue-400' : 'hover:text-blue-300'}`}>
+                                        {item}
+                                    </button>
+                                ))}
+                            </div>
+                            <div>
+                                {user ? (<button onClick={() => setCurrentPage('StudentInfo')} className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md font-semibold transition">My Profile</button>) : (<button onClick={() => setShowLogin(true)} className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md font-semibold transition">Login</button>)}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
+
+        const HomePage = () => (
+            <div className="p-8">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-white">Welcome to the ENTC Department</h2>
+                    <p className="text-gray-400 mt-2">A hub of innovation and excellence in engineering.</p>
+                </div>
+                <div className="p-6 bg-gray-800 rounded-lg border-l-4 border-blue-500">
+                    <h3 className="font-bold text-xl text-blue-400">About This Portal</h3>
+                    <p className="mt-2 text-gray-300">This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p>
+                </div>
+            </div>
+        );
+        
+        const FacultyPage = () => {
+            const { data, showDetails } = React.useContext(AppContext);
+            return (
+                <div className="p-8 bg-gray-900">
+                    <h2 className="text-3xl font-bold text-center mb-8 text-white">Our Faculty</h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {data.faculty.map(fac => (
+                            <div key={fac.id} className="bg-gray-800 p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onClick={() => showDetails(fac, 'faculty')}>
+                                <img src={fac.imageUrl} alt={fac.name} className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" />
+                                <h3 className="text-xl font-bold text-white">{fac.name}</h3>
+                                <p className="text-blue-400">{fac.designation}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const DetailModal = ({ item, type, onClose }) => {
+            if (!item) return null;
+            const renderContent = () => {
+                if (type === 'faculty') {
+                    return (
+                        <div className="text-white">
+                            <img src={item.imageUrl} alt={item.name} className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" />
+                            <h2 className="text-2xl font-bold text-center">{item.name}</h2>
+                            <p className="text-center text-blue-400">{item.designation}</p>
+                            <div className="mt-4 pt-4 border-t border-gray-600">
+                                <h4 className="font-semibold text-lg">Biography</h4>
+                                <p className="text-gray-300 mt-1">{item.bio}</p>
+                            </div>
+                        </div>
+                    );
+                }
+                return <p>Details not available.</p>;
+            };
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" onClick={onClose}>
+                    <div className="bg-gray-800 p-8 rounded-lg shadow-2xl w-full max-w-2xl relative border border-gray-700" onClick={e => e.stopPropagation()}>
+                        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
+                        {renderContent()}
+                    </div>
+                </div>
+            );
+        };
+
+        const Footer = () => (
+            <footer className="bg-gray-900 text-gray-400 text-center p-4">
+                <p>Designed by Sarthak</p>
+            </footer>
+        );
+
+        function App() {
+            const [currentPage, setCurrentPage] = React.useState('Home');
+            const [user, setUser] = React.useState(null);
+            const [showLogin, setShowLogin] = React.useState(false);
+            const [viewingItem, setViewingItem] = React.useState(null);
+            const [modalType, setModalType] = React.useState(null);
+            const data = mockData;
+
+            const handleLogin = (email, password) => { /* Mock login */ };
+            const handleLogout = () => { /* Mock logout */ };
+            const showDetails = (item, type) => {
+                setViewingItem(item);
+                setModalType(type);
+            };
+            const closeDetails = () => setViewingItem(null);
+
+            const renderPage = () => {
+                // Simplified for this example
+                if (currentPage === 'Faculty') return <FacultyPage />;
+                return <HomePage />;
+            };
+            
+            const contextValue = { currentPage, setCurrentPage, user, setShowLogin, data, showDetails };
+
+            return (
+                <AppContext.Provider value={contextValue}>
+                    <div className="bg-gray-900 min-h-screen font-sans text-gray-200">
+                        <DetailModal item={viewingItem} type={modalType} onClose={closeDetails} />
+                        <Header />
+                        <Navigation />
+                        <main className="container mx-auto my-8 bg-gray-900/80 backdrop-blur-sm rounded-lg shadow-xl min-h-[60vh] border border-gray-700">
+                            {renderPage()}
+                        </main>
+                        <Footer />
+                    </div>
+                </AppContext.Provider>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
