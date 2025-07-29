@@ -31,11 +31,18 @@
         .card img { width: 8rem; height: 8rem; border-radius: 9999px; margin-left: auto; margin-right: auto; margin-bottom: 1rem; object-fit: cover; }
         .card h3 { font-size: 1.25rem; font-weight: bold; color: #ffffff; }
         .card p { color: #9ca3af; }
+        .list-item { background-color: #1f2937; padding: 1rem; border-radius: 0.375rem; cursor: pointer; transition: box-shadow 0.3s; }
+        .list-item:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .list-container { max-width: 56rem; margin: auto; display: flex; flex-direction: column; gap: 1rem; }
         .footer { background-color: #111827; color: #9ca3af; text-align: center; padding: 1rem; }
         .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 50; }
         .modal-content { background-color: #1f2937; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 42rem; position: relative; border: 1px solid #4b5563; }
         .modal-close-button { position: absolute; top: 1rem; right: 1rem; color: #9ca3af; font-size: 1.875rem; font-weight: bold; cursor: pointer; }
         .modal-close-button:hover { color: #ffffff; }
+        .modal-content h2 { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1rem; color: #ffffff; }
+        .modal-content h4 { font-weight: 600; font-size: 1.125rem; margin-top: 1rem; }
+        .modal-content p { color: #d1d5db; margin-top: 0.25rem; }
+        .modal-content .divider { border-top: 1px solid #4b5563; margin-top: 1rem; padding-top: 1rem; }
     </style>
     <!-- 2. Load React Libraries -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -50,101 +57,131 @@
     <script type="text/babel">
         // --- MOCK DATABASE ---
         const mockData = {
+            toppers: [
+                { id: 1, name: 'Priya Sharma', batch: '2024', achievement: 'University Rank 1', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=PS', details: 'Priya secured the top position in the university with a GPA of 9.8. She excelled in subjects like VLSI Design and Wireless Communication.' },
+                { id: 2, name: 'Amit Singh', batch: '2023', achievement: 'Gold Medalist', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=AS', details: 'Amit was awarded the Gold Medal for his outstanding final year project on embedded systems for agriculture.' },
+            ],
+            achievements: [
+                { id: 1, title: 'Smart India Hackathon 2023', description: 'Our team won the first prize in the software edition.', details: 'A team of four students from the ENTC department developed a solution for waste management using AI and IoT, securing the top spot among 500+ teams.' },
+                { id: 2, title: 'National Robotics Competition', description: 'Secured second place in the line-follower robot category.', details: 'The Robotics Club team built an autonomous robot that navigated a complex track in record time, earning them the runner-up position.' },
+            ],
             faculty: [
                 { id: 1, name: 'Dr. R. K. Gupta', designation: 'Head of Department', qualification: 'Ph.D. (IIT Bombay)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=RG', bio: 'Dr. R. K. Gupta has over 20 years of experience in academia and research.' },
                 { id: 2, name: 'Prof. S. B. Patil', designation: 'Professor', qualification: 'M.Tech (Signal Processing)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=SP', bio: 'Prof. S. B. Patil is an expert in signal processing algorithms.' },
             ],
-            // Add other mock data here as needed...
+            students: [ 
+                { id: 1, name: 'Sarthak Deshmukh', email: 'sarthak@example.com', batch: '2025', achievements: 'Class Representative, Topper in Semester 3.' },
+                { id: 2, name: 'Aisha Khan', email: 'aisha@example.com', batch: '2025', achievements: 'Lead of the Robotics Club.' },
+            ],
+            placementStats: { highestPackage: '18 LPA', averagePackage: '6.5 LPA' },
+            galleryImages: [ 
+                { id: 1, url: 'https://placehold.co/500x300/A5B4FC/FFFFFF?text=Workshop', caption: 'Robotics Workshop' }, 
+                { id: 2, url: 'https://placehold.co/500x400/A5B4FC/FFFFFF?text=Tech+Fest', caption: 'Annual Tech Fest' },
+                { id: 3, url: 'https://placehold.co/500x500/A5B4FC/FFFFFF?text=Seminar', caption: 'Guest Seminar' },
+                { id: 4, url: 'https://placehold.co/500x350/A5B4FC/FFFFFF?text=Lab+Session', caption: 'Lab Session' },
+            ],
+            clubs: [ 
+                { id: 1, name: 'Robotics Club', description: 'A community for students passionate about building and programming robots.', head: 'Aisha Khan', activities: 'Workshops on Arduino and Raspberry Pi, Participation in national robotics competitions.' },
+                { id: 2, name: 'Coding Society', description: 'Focuses on competitive programming and software development projects.', head: 'Rohan Verma', activities: 'Weekly coding challenges, Guest lectures from industry experts, Hackathons.' },
+            ],
+            projects: [ 
+                { id: 1, title: 'IoT Based Smart Home', description: 'A project to control home appliances using a web interface.', imageUrl: 'https://placehold.co/600x400/3B82F6/FFFFFF?text=IoT+Project', team: 'Amit, Priya, Sneha', technologies: 'Raspberry Pi, Python, React' },
+                { id: 2, title: 'AI Sign Language Translator', description: 'A real-time sign language to text/speech converter using AI.', imageUrl: 'https://placehold.co/600x400/10B981/FFFFFF?text=AI+Project', team: 'Rohan, Meera, Karan', technologies: 'Python, TensorFlow, OpenCV, Flask' },
+            ],
+            publications: [ 
+                { id: 1, title: 'A Novel Approach to 5G Antenna Design', authors: 'Dr. R. K. Gupta, S. B. Patil', journal: 'IEEE Transactions on Antennas', year: '2023', abstract: 'This paper presents a novel microstrip patch antenna design for 5G communication systems...' },
+                { id: 2, title: 'Low-Power VLSI Architectures', authors: 'Prof. M. Joshi', journal: 'Journal of Low Power Electronics', year: '2024', abstract: 'This research explores various architectural techniques to reduce power consumption in hardware accelerators.' },
+            ]
         };
 
         const AppContext = React.createContext();
 
         // --- HELPER COMPONENTS ---
-        const Header = () => (
-            <header className="header">
-                <h1>ISBM College of Engineering</h1>
-                <h3>Department of Electronics and Telecommunication</h3>
-            </header>
-        );
+        const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics and Telecommunication</h3> </header> );
+        const Footer = () => ( <footer className="footer"> <p>Designed by Sarthak</p> </footer> );
 
         const Navigation = () => {
-            const { currentPage, setCurrentPage } = React.useContext(AppContext);
-            const navItems = ['Home', 'Faculty']; // Simplified for this example
+            const { currentPage, setCurrentPage, user, setShowLogin } = React.useContext(AppContext);
+            const navItems = ['Home', 'Toppers', 'Achievements', 'Faculty', 'Placements', 'Gallery', 'Clubs', 'Projects', 'Publications', 'Contact'];
             return (
                 <nav className="navigation">
                     <div className="container nav-container">
                         <div className="nav-links">
-                            {navItems.map(item => (
-                                <button key={item} onClick={() => setCurrentPage(item)} className={`nav-button ${currentPage === item ? 'active' : ''}`}>
-                                    {item}
-                                </button>
-                            ))}
+                            {navItems.map(item => ( <button key={item} onClick={() => setCurrentPage(item)} className={`nav-button ${currentPage === item ? 'active' : ''}`}>{item}</button> ))}
                         </div>
-                        <button className="login-button">Login</button>
+                        <div>
+                            {user ? (<button onClick={() => setCurrentPage('StudentInfo')} className="login-button">My Profile</button>) : (<button onClick={() => setShowLogin(true)} className="login-button">Login</button>)}
+                        </div>
                     </div>
                 </nav>
             );
         };
-
-        const Footer = () => (
-            <footer className="footer">
-                <p>Designed by Sarthak</p>
-            </footer>
-        );
-
+        
         const DetailModal = ({ item, type, onClose }) => {
             if (!item) return null;
             const renderContent = () => {
-                if (type === 'faculty') {
-                    return (
-                        <div>
-                            <img src={item.imageUrl} alt={item.name} />
-                            <h3>{item.name}</h3>
-                            <p>{item.designation}</p>
-                            <h4>Biography</h4>
-                            <p>{item.bio}</p>
-                        </div>
-                    );
+                switch (type) {
+                    case 'faculty': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.designation}</p><div className="divider"><h4>Biography</h4><p>{item.bio}</p></div></div>);
+                    case 'topper': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.achievement}</p><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'achievement': return (<div><h2>{item.title}</h2><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'gallery': return (<div><img src={item.url} alt={item.caption} style={{width: '100%', borderRadius: '0.5rem', marginBottom: '1rem'}}/><p style={{textAlign: 'center'}}>{item.caption}</p></div>);
+                    case 'club': return (<div><h2>{item.name}</h2><div className="divider"><h4>About</h4><p>{item.description}</p></div><div className="divider"><h4>Activities</h4><p>{item.activities}</p></div></div>);
+                    case 'project': return (<div><img src={item.imageUrl} alt={item.title} style={{width: '100%', height: '12rem', objectFit: 'cover', borderRadius: '0.5rem', marginBottom: '1rem'}}/><h2>{item.title}</h2><div className="divider"><h4>Description</h4><p>{item.description}</p></div><div className="divider"><h4>Team</h4><p>{item.team}</p></div></div>);
+                    case 'publication': return (<div><h2>{item.title}</h2><p style={{color: '#9ca3af', fontSize: '0.875rem'}}>{item.authors} ({item.year})</p><div className="divider"><h4>Abstract</h4><p>{item.abstract}</p></div></div>);
+                    default: return <p>Details not available.</p>;
                 }
-                return <p>Details not available.</p>;
             };
+            return ( <div className="modal-overlay" onClick={onClose}><div className="modal-content" onClick={e => e.stopPropagation()}><button onClick={onClose} className="modal-close-button">&times;</button>{renderContent()}</div></div> );
+        };
+        
+        const LoginModal = ({ onLogin, onClose }) => {
+            const [email, setEmail] = React.useState('');
+            const [password, setPassword] = React.useState('');
             return (
-                <div className="modal-overlay" onClick={onClose}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button onClick={onClose} className="modal-close-button">&times;</button>
-                        {renderContent()}
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Department Login</h2>
+                        <form onSubmit={(e) => { e.preventDefault(); onLogin(email, password); }}>
+                            <div style={{marginBottom: '1rem'}}><label style={{display: 'block', color: '#d1d5db'}}>Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div>
+                            <div style={{marginBottom: '1.5rem'}}><label style={{display: 'block', color: '#d1d5db'}}>Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Login</button><button type="button" onClick={onClose} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
+                        </form>
                     </div>
                 </div>
             );
         };
 
         // --- PAGE COMPONENTS ---
-        const HomePage = () => (<div className="page"><h2 className="page-title">Welcome to the ENTC Department</h2></div>);
-        
-        const FacultyPage = () => { 
-            const { data, showDetails } = React.useContext(AppContext); 
-            return (
-                <div className="page">
-                    <h2 className="page-title">Our Faculty</h2>
-                    <div className="card-grid">
-                        {data.faculty.map(item => (
-                            <div key={item.id} className="card" onClick={() => showDetails(item, 'faculty')}>
-                                <img src={item.imageUrl} alt={item.name} />
-                                <h3>{item.name}</h3>
-                                <p>{item.designation}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ); 
-        };
+        const HomePage = () => (<div className="page"><h2 className="page-title">Welcome to the ENTC Department</h2><div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6'}}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3><p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p></div></div>);
+        const ToppersPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Department Toppers</h2><div className="card-grid">{data.toppers.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'topper')}><img src={item.imageUrl} alt={item.name} style={{borderColor: '#f59e0b'}} /><h3>{item.name}</h3><p style={{color: '#f59e0b', fontWeight: 'bold'}}>{item.achievement}</p></div>))}</div></div>); };
+        const AchievementsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Our Achievements</h2><div className="list-container">{data.achievements.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'achievement')}><p style={{fontWeight: 600, color: '#60a5fa'}}>{item.title}</p></div>))}</div></div>); };
+        const FacultyPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Our Faculty</h2><div className="card-grid">{data.faculty.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'faculty')}><img src={item.imageUrl} alt={item.name} /><h3>{item.name}</h3><p style={{color: '#60a5fa'}}>{item.designation}</p></div>))}</div></div>); };
+        const PlacementsPage = () => { const { data } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Placement Highlights</h2><div style={{display: 'flex', justifyContent: 'center', gap: '2rem'}}><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#60a5fa'}}>{data.placementStats.highestPackage}</p><p>Highest Package</p></div><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#34d399'}}>{data.placementStats.averagePackage}</p><p>Average Package</p></div></div></div>); };
+        const GalleryPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Photo Gallery</h2><div className="card-grid" style={{gridTemplateColumns: 'repeat(4, 1fr)'}}>{data.galleryImages.map(item => (<div key={item.id} className="card" style={{padding: 0}} onClick={() => showDetails(item, 'gallery')}><img src={item.url} alt={item.caption} style={{width: '100%', height: '100%', borderRadius: '0.5rem', objectFit: 'cover'}} /></div>))}</div></div>); };
+        const ClubsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Student Clubs</h2><div className="list-container">{data.clubs.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'club')}><h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>{item.name}</h3><p>{item.description}</p></div>))}</div></div>); };
+        const ProjectsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Student Projects</h2><div className="card-grid">{data.projects.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'project')}><img src={item.imageUrl} alt={item.title} style={{borderRadius: '0.5rem'}} /><h3>{item.title}</h3></div>))}</div></div>); };
+        const PublicationsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Publications</h2><div className="list-container">{data.publications.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'publication')}><p style={{fontWeight: 600}}>{item.title}</p></div>))}</div></div>); };
+        const ContactPage = () => { return (<div className="page"><h2 className="page-title">Contact Us</h2><form className="list-container" style={{gap: '1rem'}} onSubmit={(e) => { e.preventDefault(); alert('Form submitted (demo)!'); }}><div><label>Name</label><input type="text" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Email</label><input type="email" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Message</label><textarea rows="5" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required></textarea></div><div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send</button></div></form></div>); };
+        const StudentInfoPage = () => { const { user, handleLogout } = React.useContext(AppContext); return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><h2 className="page-title">Student Profile</h2><button onClick={handleLogout} className="login-button" style={{backgroundColor: '#dc2626'}}>Logout</button></div><div className="list-item"><p><strong>Name:</strong> {user.name}</p><p><strong>Email:</strong> {user.email}</p><p><strong>Achievements:</strong> {user.achievements}</p></div></div>); };
 
         function App() {
             const [currentPage, setCurrentPage] = React.useState('Home');
+            const [user, setUser] = React.useState(null);
+            const [showLogin, setShowLogin] = React.useState(false);
             const [viewingItem, setViewingItem] = React.useState(null);
             const [modalType, setModalType] = React.useState(null);
             const data = mockData;
 
+            const handleLogin = (email, password) => {
+                const student = mockData.students.find(s => s.email === email);
+                if (student) {
+                    setUser(student);
+                    setShowLogin(false);
+                } else {
+                    alert('User not found!');
+                }
+            };
+            const handleLogout = () => setUser(null);
             const showDetails = (item, type) => {
                 setViewingItem(item);
                 setModalType(type);
@@ -153,16 +190,27 @@
 
             const renderPage = () => {
                 switch (currentPage) {
+                    case 'Home': return <HomePage />;
+                    case 'Toppers': return <ToppersPage />;
+                    case 'Achievements': return <AchievementsPage />;
                     case 'Faculty': return <FacultyPage />;
+                    case 'Placements': return <PlacementsPage />;
+                    case 'Gallery': return <GalleryPage />;
+                    case 'Clubs': return <ClubsPage />;
+                    case 'Projects': return <ProjectsPage />;
+                    case 'Publications': return <PublicationsPage />;
+                    case 'Contact': return <ContactPage />;
+                    case 'StudentInfo': return <StudentInfoPage />;
                     default: return <HomePage />;
                 }
             };
             
-            const contextValue = { currentPage, setCurrentPage, data, showDetails };
+            const contextValue = { currentPage, setCurrentPage, user, setShowLogin, data, showDetails, handleLogout };
 
             return (
                 <AppContext.Provider value={contextValue}>
                     <div>
+                        {showLogin && <LoginModal onLogin={handleLogin} onClose={() => setShowLogin(false)} />}
                         <DetailModal item={viewingItem} type={modalType} onClose={closeDetails} />
                         <Header />
                         <Navigation />
