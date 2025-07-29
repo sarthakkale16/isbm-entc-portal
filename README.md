@@ -1,1 +1,0 @@
-# isbm-entc-portal
