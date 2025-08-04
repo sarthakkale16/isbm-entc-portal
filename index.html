@@ -265,7 +265,8 @@
                     galleryImages: ['url', 'caption'],
                     projects: ['title', 'description', 'imageUrl', 'team', 'technologies'],
                     toppers: ['name', 'batch', 'achievement', 'imageUrl', 'details'],
-                    achievements: ['title', 'description', 'details']
+                    achievements: ['title', 'description', 'details'],
+                    faculty: ['name', 'designation', 'qualification', 'imageUrl', 'bio']
                 };
                 return (fields[collection] || []).map(field => (
                     <div className="form-group" key={field}>
@@ -289,6 +290,7 @@
                                         <option value="projects">Project</option>
                                         <option value="toppers">Topper</option>
                                         <option value="achievements">Achievement</option>
+                                        <option value="faculty">Faculty</option>
                                     </select>
                                 </div>
                                 {renderForm()}
