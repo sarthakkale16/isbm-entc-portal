@@ -71,12 +71,12 @@
     <script type="text/babel">
         // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAZuvDbyQPecbyU1GT_yzm69_dY9dCGHdA",
+            authDomain: "isbm-entc-portal.firebaseapp.com",
+            projectId: "isbm-entc-portal",
+            storageBucket: "isbm-entc-portal.firebasestorage.app",
+            messagingSenderId: "296669265467",
+            appId: "1:296669265467:web:162438d50a2413bed2e61e"
         };
 
         // Initialize Firebase
@@ -99,7 +99,7 @@
 
         const Navigation = () => {
             const { currentPage, setCurrentPage, user, isAdmin, handleLogout, setShowLogin } = React.useContext(AppContext);
-            const navItems = ['Home', 'Toppers', 'Achievements', 'Faculty', 'Placements', 'Gallery', 'Clubs', 'Projects', 'Publications', 'Contact'];
+            const navItems = ['Home', 'Toppers', 'Achievements', 'Faculty', 'Placements', 'Gallery', 'Clubs', 'Projects', 'Publications', 'Feedback'];
             return (
                 <nav className="navigation">
                     <div className="container nav-container">
@@ -236,7 +236,7 @@
 
             return (
                 <div className="page">
-                    <h2 className="page-title">Contact Us</h2>
+                    <h2 className="page-title">Feedback Form</h2>
                     <form className="list-container" ref={formRef} style={{gap: '1rem'}} onSubmit={handleSubmit}>
                         <div className="form-group"><label className="form-label">Name</label><input type="text" className="form-input" onChange={e => setFormData(prev => ({...prev, name: e.target.value}))} required /></div>
                         <div className="form-group"><label className="form-label">Email</label><input type="email" className="form-input" onChange={e => setFormData(prev => ({...prev, email: e.target.value}))} required /></div>
@@ -432,7 +432,7 @@
                     case 'Clubs': return <ClubsPage />;
                     case 'Projects': return <ProjectsPage />;
                     case 'Publications': return <PublicationsPage />;
-                    case 'Contact': return <ContactPage />;
+                    case 'Feedback': return <ContactPage />;
                     case 'Admin': return isAdmin ? <AdminPage /> : <HomePage />;
                     default: return <HomePage />;
                 }
