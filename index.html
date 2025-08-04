@@ -116,13 +116,69 @@
         };
         
         const DetailModal = ({ item, type, onClose }) => {
-            // This component is now defined in the full App component below
-            return null; 
+            const { summarizeAbstract, geminiSummary, geminiLoading } = React.useContext(AppContext);
+            if (!item) return null;
+            const renderContent = () => {
+                switch (type) {
+                    case 'faculty': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.designation}</p><div className="divider"><h4>Biography</h4><p>{item.bio}</p></div></div>);
+                    case 'topper': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.achievement}</p><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'achievement': return (<div><h2>{item.title}</h2><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'gallery': return (<div><img src={item.url} alt={item.caption} style={{width: '100%', borderRadius: '0.5rem', marginBottom: '1rem'}}/><p style={{textAlign: 'center'}}>{item.caption}</p></div>);
+                    case 'club': return (<div><h2>{item.name}</h2><div className="divider"><h4>About</h4><p>{item.description}</p></div><div className="divider"><h4>Activities</h4><p>{item.activities}</p></div></div>);
+                    case 'project': return (<div><img src={item.imageUrl} alt={item.title} style={{width: '100%', height: '12rem', objectFit: 'cover', borderRadius: '0.5rem', marginBottom: '1rem'}}/><h2>{item.title}</h2><div className="divider"><h4>Description</h4><p>{item.description}</p></div><div className="divider"><h4>Team</h4><p>{item.team}</p></div></div>);
+                    case 'publication': return (<div><h2>{item.title}</h2><p style={{color: '#9ca3af', fontSize: '0.875rem'}}>{item.authors} ({item.year})</p><div className="divider"><h4>Abstract</h4><p>{item.abstract}</p></div><div className="divider"><button onClick={() => summarizeAbstract(item.abstract)} disabled={geminiLoading} className="gemini-button">{geminiLoading ? 'Summarizing...' : '✨ Summarize Abstract'}</button>{geminiSummary && (<div style={{marginTop: '1rem', padding: '1rem', backgroundColor: '#374151', borderRadius: '0.5rem'}}><h5>Simplified Summary:</h5><p>{geminiSummary}</p></div>)}</div></div>);
+                    default: return <p>Details not available.</p>;
+                }
+            };
+            return ( <div className="modal-overlay" onClick={onClose}><div className="modal-content" onClick={e => e.stopPropagation()}><button onClick={onClose} className="modal-close-button">&times;</button>{renderContent()}</div></div> );
         };
         
         const LoginModal = ({ onClose }) => {
-            // This component is now defined in the full App component below
-            return null;
+            const { handleLogin } = React.useContext(AppContext);
+            const [email, setEmail] = React.useState('');
+            const [password, setPassword] = React.useState('');
+            const [error, setError] = React.useState('');
+
+            const onLogin = async (e) => {
+                e.preventDefault();
+                setError('');
+                const success = await handleLogin(email, password);
+                if (!success) setError('Login failed. Please check your credentials.');
+            };
+
+            return (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Department Login</h2>
+                        {error && <p style={{color: '#f87171', textAlign: 'center'}}>{error}</p>}
+                        <form onSubmit={onLogin}>
+                            <div className="form-group"><label className="form-label">Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="form-input" required /></div>
+                            <div className="form-group"><label className="form-label">Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} className="form-input" required /></div>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Login</button><button type="button" onClick={onClose} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const ProjectGeneratorModal = () => {
+            const { showProjectGenerator, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, geminiLoading } = React.useContext(AppContext);
+            const [keywords, setKeywords] = React.useState('');
+            if (!showProjectGenerator) return null;
+            return (
+                <div className="modal-overlay" onClick={() => setShowProjectGenerator(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <button onClick={() => setShowProjectGenerator(false)} className="modal-close-button">&times;</button>
+                        <h2>✨ Project Idea Generator</h2>
+                        <form onSubmit={(e) => { e.preventDefault(); generateProjectIdeas(keywords); }}>
+                            <label className="form-label">Enter keywords (e.g., IoT, healthcare)</label>
+                            <input type="text" value={keywords} onChange={e => setKeywords(e.target.value)} className="form-input" placeholder="machine learning, signal processing..." />
+                            <button type="submit" disabled={geminiLoading} className="gemini-button" style={{marginTop: '1rem'}}>{geminiLoading ? 'Generating...' : 'Generate Ideas'}</button>
+                        </form>
+                        {geminiIdeas && (<div className="divider"><h4>Generated Ideas:</h4><div style={{whiteSpace: 'pre-wrap', backgroundColor: '#374151', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem'}}>{geminiIdeas}</div></div>)}
+                    </div>
+                </div>
+            );
         };
 
         // --- PAGE COMPONENTS ---
@@ -141,31 +197,29 @@
             const { addData } = React.useContext(AppContext);
             const [collection, setCollection] = React.useState('galleryImages');
             const [formData, setFormData] = React.useState({});
+            const formRef = React.useRef();
 
             const handleAdd = (e) => {
                 e.preventDefault();
                 addData(collection, formData);
                 setFormData({});
+                formRef.current.reset();
             };
             
             const renderForm = () => {
-                switch(collection) {
-                    case 'galleryImages': return (
-                        <>
-                            <div className="form-group"><label className="form-label">Image URL</label><input type="text" className="form-input" onChange={e => setFormData({...formData, url: e.target.value})} /></div>
-                            <div className="form-group"><label className="form-label">Caption</label><input type="text" className="form-input" onChange={e => setFormData({...formData, caption: e.target.value})} /></div>
-                        </>
-                    );
-                    case 'projects': return (
-                        <>
-                            <div className="form-group"><label className="form-label">Title</label><input type="text" className="form-input" onChange={e => setFormData({...formData, title: e.target.value})} /></div>
-                            <div className="form-group"><label className="form-label">Description</label><input type="text" className="form-input" onChange={e => setFormData({...formData, description: e.target.value})} /></div>
-                            <div className="form-group"><label className="form-label">Image URL</label><input type="text" className="form-input" onChange={e => setFormData({...formData, imageUrl: e.target.value})} /></div>
-                        </>
-                    );
-                    // Add more cases for other collections here
-                    default: return <p>Select a collection to add data.</p>
-                }
+                // Simplified form rendering
+                const fields = {
+                    galleryImages: ['url', 'caption'],
+                    projects: ['title', 'description', 'imageUrl', 'team', 'technologies'],
+                    toppers: ['name', 'batch', 'achievement', 'imageUrl', 'details'],
+                    achievements: ['title', 'description', 'details']
+                };
+                return (fields[collection] || []).map(field => (
+                    <div className="form-group" key={field}>
+                        <label className="form-label">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                        <input type="text" className="form-input" onChange={e => setFormData(prev => ({...prev, [field]: e.target.value}))} />
+                    </div>
+                ));
             };
 
             return (
@@ -174,7 +228,7 @@
                     <div className="list-container">
                         <div className="list-item">
                             <h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>Add New Content</h3>
-                            <form onSubmit={handleAdd}>
+                            <form onSubmit={handleAdd} ref={formRef}>
                                 <div className="form-group">
                                     <label className="form-label">Select Collection</label>
                                     <select className="form-input" value={collection} onChange={e => setCollection(e.target.value)}>
@@ -197,10 +251,10 @@
             const [currentPage, setCurrentPage] = React.useState('Home');
             const [user, setUser] = React.useState(null);
             const [isAdmin, setIsAdmin] = React.useState(false);
-            const [showLogin, setShowLogin] = React.useState(false);
             const [data, setData] = React.useState({});
             const [viewingItem, setViewingItem] = React.useState(null);
             const [modalType, setModalType] = React.useState(null);
+            const [showLogin, setShowLogin] = React.useState(false);
             const [showProjectGenerator, setShowProjectGenerator] = React.useState(false);
             const [geminiLoading, setGeminiLoading] = React.useState(false);
             const [geminiSummary, setGeminiSummary] = React.useState('');
@@ -229,7 +283,7 @@
                     return db.collection(col).onSnapshot(snapshot => {
                         const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                         setData(prev => ({ ...prev, [col]: items }));
-                    });
+                    }, error => console.error(`Error fetching ${col}:`, error));
                 });
                 return () => unsubscribers.forEach(unsub => unsub());
             }, []);
@@ -248,14 +302,49 @@
                     .then(() => alert('Data added successfully!'))
                     .catch(error => console.error("Error adding document: ", error));
             };
+            
+            const callGeminiAPI = async (prompt) => {
+                setGeminiLoading(true);
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+                    const result = await response.json();
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else { throw new Error("Invalid response structure from API."); }
+                } catch (error) {
+                    console.error("Gemini API call failed:", error);
+                    alert('AI feature failed. Please try again.');
+                    return null;
+                } finally {
+                    setGeminiLoading(false);
+                }
+            };
 
-            const showDetails = (item, type) => { setViewingItem(item); setModalType(type); };
+            const summarizeAbstract = async (abstract) => {
+                setGeminiSummary('');
+                const prompt = `Summarize the following technical abstract in simple, easy-to-understand terms for a first-year engineering student. Abstract: "${abstract}"`;
+                const summary = await callGeminiAPI(prompt);
+                if (summary) setGeminiSummary(summary);
+            };
+            
+            const generateProjectIdeas = async (keywords) => {
+                setGeminiIdeas('');
+                const prompt = `Generate 5 innovative project ideas for undergraduate ENTC engineering students based on these keywords: "${keywords}". For each idea, provide a title and a one-sentence description. Format as a numbered list.`;
+                const ideas = await callGeminiAPI(prompt);
+                if (ideas) setGeminiIdeas(ideas);
+            };
+
+            const showDetails = (item, type) => { setViewingItem(item); setModalType(type); setGeminiSummary(''); };
             const closeDetails = () => setViewingItem(null);
 
             const renderPage = () => {
-                if (currentPage === 'Login') {
-                    // Special case to render login page content
-                    return <div className="page"><h2 className="page-title">Login</h2><p style={{textAlign: 'center'}}>Please use the login button in the navigation bar.</p></div>
+                if (currentPage === 'Login' && !user) {
+                    return <LoginModal onClose={() => setCurrentPage('Home')} />;
                 }
                 switch (currentPage) {
                     case 'Home': return <HomePage />;
@@ -273,12 +362,11 @@
                 }
             };
             
-            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, setShowProjectGenerator };
+            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading };
 
             return (
                 <AppContext.Provider value={contextValue}>
                     <div>
-                        {currentPage === 'Login' && !user && <LoginModal onClose={() => setCurrentPage('Home')} />}
                         <DetailModal item={viewingItem} type={modalType} onClose={closeDetails} />
                         <ProjectGeneratorModal />
                         <Header />
