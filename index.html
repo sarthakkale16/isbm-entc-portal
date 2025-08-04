@@ -222,7 +222,30 @@
         const ClubsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.clubs) return <Spinner />; if (data.clubs.length === 0) return <EmptyState message="No clubs to display." />; return (<div className="page"><h2 className="page-title">Student Clubs</h2><div className="list-container">{data.clubs.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'club')}><h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>{item.name}</h3><p>{item.description}</p></div>))}</div></div>); };
         const ProjectsPage = () => { const { data, showDetails, setShowProjectGenerator } = React.useContext(AppContext); if (!data.projects) return <Spinner />; return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}><h2 className="page-title" style={{marginBottom: 0}}>Student Projects</h2><button onClick={() => setShowProjectGenerator(true)} className="gemini-button" style={{width: 'auto'}}>✨ Get Project Ideas</button></div>{data.projects.length === 0 ? <EmptyState message="No projects to display." /> : <div className="card-grid">{data.projects.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'project')}><img src={item.imageUrl} alt={item.title} style={{borderRadius: '0.5rem'}} /><h3>{item.title}</h3></div>))}</div>}</div>); };
         const PublicationsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.publications) return <Spinner />; if (data.publications.length === 0) return <EmptyState message="No publications to display." />; return (<div className="page"><h2 className="page-title">Publications</h2><div className="list-container">{data.publications.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'publication')}><p style={{fontWeight: 600}}>{item.title}</p></div>))}</div></div>); };
-        const ContactPage = () => { return (<div className="page"><h2 className="page-title">Contact Us</h2><form className="list-container" style={{gap: '1rem'}} onSubmit={(e) => { e.preventDefault(); alert('Form submitted (demo)!'); }}><div><label>Name</label><input type="text" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Email</label><input type="email" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Message</label><textarea rows="5" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required></textarea></div><div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send</button></div></form></div>); };
+        
+        const ContactPage = () => {
+            const { handleContactSubmit } = React.useContext(AppContext);
+            const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
+            const formRef = React.useRef();
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                handleContactSubmit(formData);
+                formRef.current.reset();
+            };
+
+            return (
+                <div className="page">
+                    <h2 className="page-title">Contact Us</h2>
+                    <form className="list-container" ref={formRef} style={{gap: '1rem'}} onSubmit={handleSubmit}>
+                        <div className="form-group"><label className="form-label">Name</label><input type="text" className="form-input" onChange={e => setFormData(prev => ({...prev, name: e.target.value}))} required /></div>
+                        <div className="form-group"><label className="form-label">Email</label><input type="email" className="form-input" onChange={e => setFormData(prev => ({...prev, email: e.target.value}))} required /></div>
+                        <div className="form-group"><label className="form-label">Message</label><textarea rows="5" className="form-input" onChange={e => setFormData(prev => ({...prev, message: e.target.value}))} required></textarea></div>
+                        <div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send Message</button></div>
+                    </form>
+                </div>
+            );
+        };
         
         const AdminPage = () => {
             const { addData } = React.useContext(AppContext);
@@ -346,6 +369,16 @@
                     .then(() => alert('Data added successfully!'))
                     .catch(error => console.error("Error adding document: ", error));
             };
+
+            const handleContactSubmit = (formData) => {
+                if (!db) return;
+                db.collection('contactSubmissions').add({
+                    ...formData,
+                    submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => alert('Thank you for your message! We will get back to you soon.'))
+                .catch(error => console.error("Error sending message: ", error));
+            };
             
             const callGeminiAPI = async (prompt) => {
                 setGeminiLoading(true);
@@ -403,7 +436,7 @@
                 }
             };
             
-            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, setShowLogin, handleLogin, handleGoogleLogin, handlePasswordReset, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading };
+            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, setShowLogin, handleLogin, handleGoogleLogin, handlePasswordReset, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading, handleContactSubmit };
 
             return (
                 <AppContext.Provider value={contextValue}>
@@ -426,4 +459,4 @@
         root.render(<App />);
     </script>
 </body>
-</ht
+</html>
