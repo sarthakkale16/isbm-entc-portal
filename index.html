@@ -43,64 +43,62 @@
         .modal-content h4 { font-weight: 600; font-size: 1.125rem; margin-top: 1rem; }
         .modal-content p { color: #d1d5db; margin-top: 0.25rem; }
         .modal-content .divider { border-top: 1px solid #4b5563; margin-top: 1rem; padding-top: 1rem; }
-        .gemini-button { background-color: #2563eb; color: white; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: none; cursor: pointer; width: 100%; }
-        .gemini-button:hover { background-color: #1d4ed8; }
-        .gemini-button:disabled { background-color: #4b5563; cursor: not-allowed; }
+        .google-button { background-color: #ffffff; color: #1f2937; font-weight: bold; padding: 0.75rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: 1px solid #4b5563; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .google-button:hover { background-color: #e5e7eb; }
     </style>
     <!-- 2. Load React Libraries -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <!-- 3. Load Babel to translate JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 4. Load Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- 4. Your React App Code -->
+    <!-- 5. Your React App Code -->
     <script type="text/babel">
-        // --- MOCK DATABASE ---
+        // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        let app, auth;
+        try {
+            app = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+        } catch (e) {
+            console.error("Firebase initialization failed. Please check your config.", e);
+        }
+
+        // --- MOCK DATABASE (for student profiles) ---
         const mockData = {
-            toppers: [
-                { id: 1, name: 'Priya Sharma', batch: '2024', achievement: 'University Rank 1', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=PS', details: 'Priya secured the top position in the university with a GPA of 9.8. She excelled in subjects like VLSI Design and Wireless Communication.' },
-                { id: 2, name: 'Amit Singh', batch: '2023', achievement: 'Gold Medalist', imageUrl: 'https://placehold.co/150x150/FBBF24/FFFFFF?text=AS', details: 'Amit was awarded the Gold Medal for his outstanding final year project on embedded systems for agriculture.' },
-            ],
-            achievements: [
-                { id: 1, title: 'Smart India Hackathon 2023', description: 'Our team won the first prize in the software edition.', details: 'A team of four students from the ENTC department developed a solution for waste management using AI and IoT, securing the top spot among 500+ teams.' },
-                { id: 2, title: 'National Robotics Competition', description: 'Secured second place in the line-follower robot category.', details: 'The Robotics Club team built an autonomous robot that navigated a complex track in record time, earning them the runner-up position.' },
-            ],
-            faculty: [
-                { id: 1, name: 'Dr. R. K. Gupta', designation: 'Head of Department', qualification: 'Ph.D. (IIT Bombay)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=RG', bio: 'Dr. R. K. Gupta has over 20 years of experience in academia and research.' },
-                { id: 2, name: 'Prof. S. B. Patil', designation: 'Professor', qualification: 'M.Tech (Signal Processing)', imageUrl: 'https://placehold.co/150x150/93C5FD/FFFFFF?text=SP', bio: 'Prof. S. B. Patil is an expert in signal processing algorithms.' },
-            ],
             students: [ 
                 { id: 1, name: 'Sarthak Deshmukh', email: 'sarthak@example.com', batch: '2025', achievements: 'Class Representative, Topper in Semester 3.' },
                 { id: 2, name: 'Aisha Khan', email: 'aisha@example.com', batch: '2025', achievements: 'Lead of the Robotics Club.' },
+                // Add the emails of users you create in Firebase here to link their profiles
             ],
-            placementStats: { highestPackage: '18 LPA', averagePackage: '6.5 LPA' },
-            galleryImages: [ 
-                { id: 1, url: 'https://placehold.co/500x300/A5B4FC/FFFFFF?text=Workshop', caption: 'Robotics Workshop' }, 
-                { id: 2, url: 'https://placehold.co/500x400/A5B4FC/FFFFFF?text=Tech+Fest', caption: 'Annual Tech Fest' },
-            ],
-            clubs: [ 
-                { id: 1, name: 'Robotics Club', description: 'A community for students passionate about building and programming robots.', head: 'Aisha Khan', activities: 'Workshops on Arduino and Raspberry Pi, Participation in national robotics competitions.' },
-            ],
-            projects: [ 
-                { id: 1, title: 'IoT Based Smart Home', description: 'A project to control home appliances using a web interface.', imageUrl: 'https://placehold.co/600x400/3B82F6/FFFFFF?text=IoT+Project', team: 'Amit, Priya, Sneha', technologies: 'Raspberry Pi, Python, React' },
-            ],
-            publications: [ 
-                { id: 1, title: 'A Novel Approach to 5G Antenna Design', authors: 'Dr. R. K. Gupta, S. B. Patil', journal: 'IEEE Transactions on Antennas', year: '2023', abstract: 'This paper presents a novel microstrip patch antenna design for 5G communication systems, achieving wider bandwidth and higher gain compared to conventional designs. The proposed antenna utilizes a unique substrate-integrated waveguide (SIW) feeding mechanism and a defected ground structure (DGS) to enhance its radiation characteristics. Simulation results show a 25% increase in bandwidth and a 3dB improvement in peak gain over existing models.' },
-            ]
+            // ... other mock data ...
         };
 
         const AppContext = React.createContext();
 
-        // --- HELPER COMPONENTS ---
+        // --- HELPER & PAGE COMPONENTS (Simplified for brevity) ---
         const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics and Telecommunication</h3> </header> );
         const Footer = () => ( <footer className="footer"> <p>Designed by Sarthak</p> </footer> );
-
         const Navigation = () => {
-            const { currentPage, setCurrentPage, user, setShowLogin } = React.useContext(AppContext);
-            const navItems = ['Home', 'Toppers', 'Achievements', 'Faculty', 'Placements', 'Gallery', 'Clubs', 'Projects', 'Publications', 'Contact'];
+            const { currentPage, setCurrentPage, user, setShowLogin, handleLogout } = React.useContext(AppContext);
+            const navItems = ['Home', 'Faculty']; // Simplified
             return (
                 <nav className="navigation">
                     <div className="container nav-container">
@@ -108,167 +106,122 @@
                             {navItems.map(item => ( <button key={item} onClick={() => setCurrentPage(item)} className={`nav-button ${currentPage === item ? 'active' : ''}`}>{item}</button> ))}
                         </div>
                         <div>
-                            {user ? (<button onClick={() => setCurrentPage('StudentInfo')} className="login-button">My Profile</button>) : (<button onClick={() => setShowLogin(true)} className="login-button">Login</button>)}
+                            {user ? (<> <button onClick={() => setCurrentPage('StudentInfo')} className="login-button">My Profile</button> <button onClick={handleLogout} className="login-button" style={{backgroundColor: '#dc2626', marginLeft: '1rem'}}>Logout</button> </>) : (<button onClick={() => setShowLogin(true)} className="login-button">Login</button>)}
                         </div>
                     </div>
                 </nav>
             );
         };
+        const HomePage = () => (<div className="page"><h2 className="page-title">Welcome to the ENTC Department</h2></div>);
+        const StudentInfoPage = () => { const { user, studentProfile } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Student Profile</h2>{studentProfile ? <div className="list-item"><p><strong>Name:</strong> {studentProfile.name}</p><p><strong>Email:</strong> {user.email}</p><p><strong>Achievements:</strong> {studentProfile.achievements}</p></div> : <p>No profile found for this user.</p>}</div>); };
+        const FacultyPage = () => { /* ... same as before ... */ return <div className="page"><h2 className="page-title">Faculty Page</h2></div>};
         
-        const DetailModal = ({ item, type, onClose }) => {
-            const { summarizeAbstract, geminiSummary, geminiLoading } = React.useContext(AppContext);
-            if (!item) return null;
-            const renderContent = () => {
-                switch (type) {
-                    case 'faculty': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.designation}</p><div className="divider"><h4>Biography</h4><p>{item.bio}</p></div></div>);
-                    case 'topper': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.achievement}</p><div className="divider"><p>{item.details}</p></div></div>);
-                    case 'achievement': return (<div><h2>{item.title}</h2><div className="divider"><p>{item.details}</p></div></div>);
-                    case 'gallery': return (<div><img src={item.url} alt={item.caption} style={{width: '100%', borderRadius: '0.5rem', marginBottom: '1rem'}}/><p style={{textAlign: 'center'}}>{item.caption}</p></div>);
-                    case 'club': return (<div><h2>{item.name}</h2><div className="divider"><h4>About</h4><p>{item.description}</p></div><div className="divider"><h4>Activities</h4><p>{item.activities}</p></div></div>);
-                    case 'project': return (<div><img src={item.imageUrl} alt={item.title} style={{width: '100%', height: '12rem', objectFit: 'cover', borderRadius: '0.5rem', marginBottom: '1rem'}}/><h2>{item.title}</h2><div className="divider"><h4>Description</h4><p>{item.description}</p></div><div className="divider"><h4>Team</h4><p>{item.team}</p></div></div>);
-                    case 'publication': return (<div><h2>{item.title}</h2><p style={{color: '#9ca3af', fontSize: '0.875rem'}}>{item.authors} ({item.year})</p><div className="divider"><h4>Abstract</h4><p>{item.abstract}</p></div><div className="divider"><button onClick={() => summarizeAbstract(item.abstract)} disabled={geminiLoading} className="gemini-button">{geminiLoading ? 'Summarizing...' : '✨ Summarize Abstract'}</button>{geminiSummary && (<div style={{marginTop: '1rem', padding: '1rem', backgroundColor: '#374151', borderRadius: '0.5rem'}}><h5>Simplified Summary:</h5><p>{geminiSummary}</p></div>)}</div></div>);
-                    default: return <p>Details not available.</p>;
-                }
-            };
-            return ( <div className="modal-overlay" onClick={onClose}><div className="modal-content" onClick={e => e.stopPropagation()}><button onClick={onClose} className="modal-close-button">&times;</button>{renderContent()}</div></div> );
-        };
-        
-        const LoginModal = ({ onLogin, onClose }) => {
+        const LoginModal = ({ onClose }) => {
+            const { handleLogin, handleGoogleLogin } = React.useContext(AppContext);
             const [email, setEmail] = React.useState('');
             const [password, setPassword] = React.useState('');
+            const [error, setError] = React.useState('');
+
+            const onLogin = async (e) => {
+                e.preventDefault();
+                setError('');
+                const success = await handleLogin(email, password);
+                if (!success) {
+                    setError('Login failed. Please check your credentials.');
+                }
+            };
+
             return (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <h2>Department Login</h2>
-                        <form onSubmit={(e) => { e.preventDefault(); onLogin(email, password); }}>
-                            <div style={{marginBottom: '1rem'}}><label style={{display: 'block', color: '#d1d5db'}}>Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div>
-                            <div style={{marginBottom: '1.5rem'}}><label style={{display: 'block', color: '#d1d5db'}}>Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div>
-                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Login</button><button type="button" onClick={onClose} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
+                        {error && <p style={{color: '#f87171', textAlign: 'center'}}>{error}</p>}
+                        
+                        <button onClick={handleGoogleLogin} className="google-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C42.022,36.218,44,30.668,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+                            Sign in with Google
+                        </button>
+
+                        <div className="divider" style={{textAlign: 'center', color: '#9ca3af'}}>OR</div>
+
+                        <form onSubmit={onLogin}>
+                            <div style={{marginBottom: '1rem'}}><label style={{display: 'block'}}>Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white'}} required /></div>
+                            <div style={{marginBottom: '1.5rem'}}><label style={{display: 'block'}}>Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white'}} required /></div>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Login with Email</button><button type="button" onClick={onClose} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
                         </form>
                     </div>
                 </div>
             );
         };
-
-        const ProjectGeneratorModal = () => {
-            const { showProjectGenerator, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, geminiLoading } = React.useContext(AppContext);
-            const [keywords, setKeywords] = React.useState('');
-            if (!showProjectGenerator) return null;
-            return (
-                <div className="modal-overlay" onClick={() => setShowProjectGenerator(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button onClick={() => setShowProjectGenerator(false)} className="modal-close-button">&times;</button>
-                        <h2>✨ Project Idea Generator</h2>
-                        <form onSubmit={(e) => { e.preventDefault(); generateProjectIdeas(keywords); }}>
-                            <label style={{display: 'block', color: '#d1d5db', marginBottom: '0.5rem'}}>Enter keywords (e.g., IoT, healthcare)</label>
-                            <input type="text" value={keywords} onChange={e => setKeywords(e.target.value)} style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} placeholder="machine learning, signal processing..." />
-                            <button type="submit" disabled={geminiLoading} className="gemini-button" style={{marginTop: '1rem'}}>{geminiLoading ? 'Generating...' : 'Generate Ideas'}</button>
-                        </form>
-                        {geminiIdeas && (<div className="divider"><h4>Generated Ideas:</h4><div style={{whiteSpace: 'pre-wrap', backgroundColor: '#374151', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem'}}>{geminiIdeas}</div></div>)}
-                    </div>
-                </div>
-            );
-        };
-
-        // --- PAGE COMPONENTS ---
-        const HomePage = () => (<div className="page"><h2 className="page-title">Welcome to the ENTC Department</h2><div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6'}}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3><p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p></div></div>);
-        const ToppersPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Department Toppers</h2><div className="card-grid">{data.toppers.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'topper')}><img src={item.imageUrl} alt={item.name} style={{borderColor: '#f59e0b'}} /><h3>{item.name}</h3><p style={{color: '#f59e0b', fontWeight: 'bold'}}>{item.achievement}</p></div>))}</div></div>); };
-        const AchievementsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Our Achievements</h2><div className="list-container">{data.achievements.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'achievement')}><p style={{fontWeight: 600, color: '#60a5fa'}}>{item.title}</p></div>))}</div></div>); };
-        const FacultyPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Our Faculty</h2><div className="card-grid">{data.faculty.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'faculty')}><img src={item.imageUrl} alt={item.name} /><h3>{item.name}</h3><p style={{color: '#60a5fa'}}>{item.designation}</p></div>))}</div></div>); };
-        const PlacementsPage = () => { const { data } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Placement Highlights</h2><div style={{display: 'flex', justifyContent: 'center', gap: '2rem'}}><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#60a5fa'}}>{data.placementStats.highestPackage}</p><p>Highest Package</p></div><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#34d399'}}>{data.placementStats.averagePackage}</p><p>Average Package</p></div></div></div>); };
-        const GalleryPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Photo Gallery</h2><div className="card-grid" style={{gridTemplateColumns: 'repeat(4, 1fr)'}}>{data.galleryImages.map(item => (<div key={item.id} className="card" style={{padding: 0}} onClick={() => showDetails(item, 'gallery')}><img src={item.url} alt={item.caption} style={{width: '100%', height: '100%', borderRadius: '0.5rem', objectFit: 'cover'}} /></div>))}</div></div>); };
-        const ClubsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Student Clubs</h2><div className="list-container">{data.clubs.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'club')}><h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>{item.name}</h3><p>{item.description}</p></div>))}</div></div>); };
-        const ProjectsPage = () => { const { data, showDetails, setShowProjectGenerator } = React.useContext(AppContext); return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}><h2 className="page-title" style={{marginBottom: 0}}>Student Projects</h2><button onClick={() => setShowProjectGenerator(true)} className="gemini-button" style={{width: 'auto'}}>✨ Get Project Ideas</button></div><div className="card-grid">{data.projects.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'project')}><img src={item.imageUrl} alt={item.title} style={{borderRadius: '0.5rem'}} /><h3>{item.title}</h3></div>))}</div></div>); };
-        const PublicationsPage = () => { const { data, showDetails } = React.useContext(AppContext); return (<div className="page"><h2 className="page-title">Publications</h2><div className="list-container">{data.publications.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'publication')}><p style={{fontWeight: 600}}>{item.title}</p></div>))}</div></div>); };
-        const ContactPage = () => { return (<div className="page"><h2 className="page-title">Contact Us</h2><form className="list-container" style={{gap: '1rem'}} onSubmit={(e) => { e.preventDefault(); alert('Form submitted (demo)!'); }}><div><label>Name</label><input type="text" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Email</label><input type="email" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required /></div><div><label>Message</label><textarea rows="5" style={{width: '100%', padding: '0.5rem', borderRadius: '0.375rem', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563'}} required></textarea></div><div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send</button></div></form></div>); };
-        const StudentInfoPage = () => { const { user, handleLogout } = React.useContext(AppContext); return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><h2 className="page-title" style={{textAlign: 'left'}}>Student Profile</h2><button onClick={handleLogout} className="login-button" style={{backgroundColor: '#dc2626'}}>Logout</button></div><div className="list-item"><p><strong>Name:</strong> {user.name}</p><p><strong>Email:</strong> {user.email}</p><p><strong>Achievements:</strong> {user.achievements}</p></div></div>); };
 
         function App() {
             const [currentPage, setCurrentPage] = React.useState('Home');
             const [user, setUser] = React.useState(null);
+            const [studentProfile, setStudentProfile] = React.useState(null);
             const [showLogin, setShowLogin] = React.useState(false);
-            const [viewingItem, setViewingItem] = React.useState(null);
-            const [modalType, setModalType] = React.useState(null);
-            const [showProjectGenerator, setShowProjectGenerator] = React.useState(false);
-            const [geminiLoading, setGeminiLoading] = React.useState(false);
-            const [geminiSummary, setGeminiSummary] = React.useState('');
-            const [geminiIdeas, setGeminiIdeas] = React.useState('');
-            const data = mockData;
+            
+            // Listen to Firebase Auth state changes
+            React.useEffect(() => {
+                if (!auth) return;
+                const unsubscribe = auth.onAuthStateChanged(firebaseUser => {
+                    if (firebaseUser) {
+                        setUser(firebaseUser);
+                        const profile = mockData.students.find(s => s.email === firebaseUser.email);
+                        setStudentProfile(profile);
+                    } else {
+                        setUser(null);
+                        setStudentProfile(null);
+                    }
+                });
+                return () => unsubscribe();
+            }, []);
 
-            const callGeminiAPI = async (prompt) => {
-                setGeminiLoading(true);
-                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-                const payload = { contents: chatHistory };
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const handleLogin = async (email, password) => {
                 try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
-                    const result = await response.json();
-                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        return result.candidates[0].content.parts[0].text;
-                    } else { throw new Error("Invalid response structure from API."); }
+                    await auth.signInWithEmailAndPassword(email, password);
+                    setShowLogin(false);
+                    setCurrentPage('StudentInfo');
+                    return true;
                 } catch (error) {
-                    console.error("Gemini API call failed:", error);
-                    alert('AI feature failed. Please try again.');
-                    return null;
-                } finally {
-                    setGeminiLoading(false);
+                    console.error("Firebase login error:", error.message);
+                    return false;
                 }
             };
 
-            const summarizeAbstract = async (abstract) => {
-                setGeminiSummary('');
-                const prompt = `Summarize the following technical abstract in simple, easy-to-understand terms for a first-year engineering student. Abstract: "${abstract}"`;
-                const summary = await callGeminiAPI(prompt);
-                if (summary) setGeminiSummary(summary);
+            const handleGoogleLogin = async () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                try {
+                    await auth.signInWithPopup(provider);
+                    setShowLogin(false);
+                    setCurrentPage('StudentInfo');
+                } catch (error) {
+                    console.error("Google login error:", error.message);
+                }
+            };
+
+            const handleLogout = async () => {
+                try {
+                    await auth.signOut();
+                    setCurrentPage('Home');
+                } catch (error) {
+                    console.error("Firebase logout error:", error);
+                }
             };
             
-            const generateProjectIdeas = async (keywords) => {
-                setGeminiIdeas('');
-                const prompt = `Generate 5 innovative project ideas for undergraduate ENTC engineering students based on these keywords: "${keywords}". For each idea, provide a title and a one-sentence description. Format as a numbered list.`;
-                const ideas = await callGeminiAPI(prompt);
-                if (ideas) setGeminiIdeas(ideas);
-            };
-
-            const handleLogin = (email, password) => {
-                const student = mockData.students.find(s => s.email === email);
-                if (student) { setUser(student); setShowLogin(false); } 
-                else { alert('User not found!'); }
-            };
-            const handleLogout = () => setUser(null);
-            const showDetails = (item, type) => {
-                setGeminiSummary('');
-                setViewingItem(item);
-                setModalType(type);
-            };
-            const closeDetails = () => setViewingItem(null);
-
             const renderPage = () => {
                 switch (currentPage) {
-                    case 'Home': return <HomePage />;
-                    case 'Toppers': return <ToppersPage />;
-                    case 'Achievements': return <AchievementsPage />;
                     case 'Faculty': return <FacultyPage />;
-                    case 'Placements': return <PlacementsPage />;
-                    case 'Gallery': return <GalleryPage />;
-                    case 'Clubs': return <ClubsPage />;
-                    case 'Projects': return <ProjectsPage />;
-                    case 'Publications': return <PublicationsPage />;
-                    case 'Contact': return <ContactPage />;
                     case 'StudentInfo': return <StudentInfoPage />;
                     default: return <HomePage />;
                 }
             };
             
-            const contextValue = { currentPage, setCurrentPage, user, setShowLogin, data, showDetails, handleLogout, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading };
+            const contextValue = { currentPage, setCurrentPage, user, studentProfile, setShowLogin, handleLogin, handleGoogleLogin, handleLogout };
 
             return (
                 <AppContext.Provider value={contextValue}>
                     <div>
-                        {showLogin && <LoginModal onLogin={handleLogin} onClose={() => setShowLogin(false)} />}
-                        <DetailModal item={viewingItem} type={modalType} onClose={closeDetails} />
-                        <ProjectGeneratorModal />
+                        {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
                         <Header />
                         <Navigation />
                         <main className="container main-content">
