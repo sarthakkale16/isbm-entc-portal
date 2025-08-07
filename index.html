@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISB&M ENTC Department</title>
+    <title>ISBM E&TC Sarthak</title>
     <!-- 1. All CSS Styles are now included directly below -->
     <style>
         body { margin: 0; font-family: sans-serif; background-color: #111827; color: #d1d5db; }
@@ -66,7 +66,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
 </head>
 <body>
@@ -85,12 +84,11 @@
         };
 
         // Initialize Firebase
-        let app, auth, db, storage;
+        let app, auth, db;
         try {
             app = firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
             db = firebase.firestore();
-            storage = firebase.storage();
         } catch (e) {
             console.error("Firebase initialization failed. Please check your config.", e);
         }
@@ -98,8 +96,8 @@
         const AppContext = React.createContext();
 
         // --- HELPER COMPONENTS ---
-        const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics and Telecommunication</h3> </header> );
-        const Footer = () => ( <footer className="footer"> <p>Designed by Sarthak</p> </footer> );
+        const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics & Telecommunication</h3> </header> );
+        const Footer = () => ( <footer className="footer"> <p>Designed & Createdby Sarthak </p> </footer> );
         const Spinner = () => (<div style={{display: 'flex', justifyContent: 'center', padding: '2rem'}}><div style={{animation: 'spin 1s linear infinite', width: '3rem', height: '3rem', borderRadius: '50%', borderTop: '4px solid #60a5fa', borderRight: '4px solid transparent'}}></div></div>);
         const EmptyState = ({message}) => (<div style={{textAlign: 'center', padding: '2rem', color: '#9ca3af'}}><p>{message}</p></div>);
 
@@ -222,7 +220,7 @@
         const HomePage = () => {
             React.useEffect(() => {
                 const scriptId = 'flippingbook-script';
-                if (document.getElementById(scriptId)) return; // Avoid adding script multiple times
+                if (document.getElementById(scriptId)) return;
                 
                 const script = document.createElement('script');
                 script.id = scriptId;
@@ -233,30 +231,15 @@
 
                 return () => {
                     const existingScript = document.getElementById(scriptId);
-                    if (existingScript) {
-                        document.body.removeChild(existingScript);
-                    }
+                    if (existingScript) document.body.removeChild(existingScript);
                 };
             }, []);
 
             return (
                 <div className="page">
-                    <div className="text-center mb-12">
-                        <h2 className="page-title" style={{ marginBottom: '0.5rem' }}>Welcome to the ENTC Department</h2>
-                        <p className="text-gray-400 mt-2">A hub of innovation and excellence in engineering.</p>
-                    </div>
-
-                    <div style={{ textAlign: 'center', margin: '2rem 0', padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem' }}>
-                         <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa', marginBottom: '1rem'}}>Department Booklet</h3>
-                        <a href="https://online.flippingbook.com/view/935750571/" className="fbo-embed" data-fbo-id="adf64cce6b" data-fbo-ratio="3:2" data-fbo-lightbox="yes" data-fbo-width="100%" data-fbo-height="auto" data-fbo-version="1" style={{ maxWidth: '100%', fontSize: '1.1rem', color: '#93c5fd', textDecoration: 'underline' }}>
-                            View the ENTC Department Booklet
-                        </a>
-                    </div>
-
-                    <div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6', marginTop: '2rem'}}>
-                        <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3>
-                        <p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p>
-                    </div>
+                    <div className="text-center mb-12"><h2 className="page-title" style={{ marginBottom: '0.5rem' }}>Welcome to the ENTC Department</h2><p className="text-gray-400 mt-2">A hub of innovation and excellence in engineering.</p></div>
+                    <div style={{ textAlign: 'center', margin: '2rem 0', padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem' }}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa', marginBottom: '1rem'}}>Department Booklet</h3><a href="https://online.flippingbook.com/view/935750571/" className="fbo-embed" data-fbo-id="adf64cce6b" data-fbo-ratio="3:2" data-fbo-lightbox="yes" data-fbo-width="100%" data-fbo-height="auto" data-fbo-version="1" style={{ maxWidth: '100%', fontSize: '1.1rem', color: '#93c5fd', textDecoration: 'underline' }}>View the ENTC Department Booklet</a></div>
+                    <div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6', marginTop: '2rem'}}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3><p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p></div>
                 </div>
             );
         };
@@ -282,7 +265,7 @@
 
             return (
                 <div className="page">
-                    <h2 className="page-title">Contact Us</h2>
+                    <h2 className="page-title">Feedback / Contact Us</h2>
                     <form className="list-container" ref={formRef} style={{gap: '1rem'}} onSubmit={handleSubmit}>
                         <div className="form-group"><label className="form-label">Name</label><input type="text" className="form-input" onChange={e => setFormData(prev => ({...prev, name: e.target.value}))} required /></div>
                         <div className="form-group"><label className="form-label">Email</label><input type="email" className="form-input" onChange={e => setFormData(prev => ({...prev, email: e.target.value}))} required /></div>
@@ -297,14 +280,12 @@
             const { data, addData, deleteData } = React.useContext(AppContext);
             const [collection, setCollection] = React.useState('faculty');
             const [formData, setFormData] = React.useState({});
-            const [file, setFile] = React.useState(null);
             const formRef = React.useRef();
 
             const handleAdd = (e) => {
                 e.preventDefault();
-                addData(collection, formData, file);
+                addData(collection, formData);
                 setFormData({});
-                setFile(null);
                 formRef.current.reset();
             };
 
@@ -316,23 +297,14 @@
             
             const renderForm = () => {
                 const fields = {
-                    faculty: ['name', 'designation', 'qualification', 'imageUrl', 'bio', 'order', 'alignment'],
+                    faculty: ['name', 'designation', 'qualification', 'imageUrl', 'Message From Desk', 'order', 'alignment'],
                     galleryImages: ['url', 'caption', 'order'],
                     projects: ['title', 'description', 'imageUrl', 'team', 'technologies', 'order'],
                     toppers: ['name', 'batch', 'achievement', 'imageUrl', 'details', 'order'],
                     achievements: ['title', 'description', 'details', 'order']
                 };
-                const imageField = collection === 'faculty' || collection === 'projects' || collection === 'toppers' ? 'imageUrl' : 'url';
 
                 return (fields[collection] || []).map(field => {
-                    if (field === 'imageUrl' || field === 'url') {
-                        return (
-                             <div className="form-group" key={field}>
-                                <label className="form-label">Image File</label>
-                                <input type="file" className="form-input" onChange={e => setFile(e.target.files[0])} />
-                            </div>
-                        )
-                    }
                     if (field === 'alignment') {
                         return (
                             <div className="form-group" key={field}>
@@ -462,34 +434,10 @@
             };
             const handleLogout = () => auth.signOut();
             
-            const handleFileUpload = async (file) => {
-                if (!storage || !file) return null;
-                const storageRef = storage.ref();
-                const fileRef = storageRef.child(`images/${Date.now()}_${file.name}`);
-                try {
-                    await fileRef.put(file);
-                    const url = await fileRef.getDownloadURL();
-                    return url;
-                } catch(error) {
-                    console.error("Error uploading file:", error);
-                    return null;
-                }
-            };
-
-            const addData = async (collectionName, newData, file) => {
+            const addData = async (collectionName, newData) => {
                 if (!db || !isAdmin) return;
                 let finalData = { ...newData, order: Number(newData.order || 0) };
                 
-                if (file) {
-                    const imageUrl = await handleFileUpload(file);
-                    if (!imageUrl) {
-                        alert('File upload failed!');
-                        return;
-                    }
-                    const imageField = collectionName === 'galleryImages' ? 'url' : 'imageUrl';
-                    finalData[imageField] = imageUrl;
-                }
-
                 db.collection(collectionName).add(finalData)
                     .then(() => alert('Data added successfully!'))
                     .catch(error => console.error("Error adding document: ", error));
@@ -516,7 +464,7 @@
                 setGeminiLoading(true);
                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
-                const apiKey = ""; 
+                const apiKey = "AIzaSyDL8mVtumX8KvgGE06vFvEnzQt03iME_6M"; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
