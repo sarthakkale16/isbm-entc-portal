@@ -3,58 +3,66 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISBM E&TC Sarthak</title>
+    <title>ISB&M ENTC Department</title>
     <!-- 1. All CSS Styles are now included directly below -->
     <style>
-        body { margin: 0; font-family: sans-serif; background-color: #111827; color: #d1d5db; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f8f9fa; color: #212529; }
         #root { min-height: 100vh; }
         .container { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
-        .header { background-color: #1f2937; padding: 1rem; text-align: center; border-bottom: 1px solid #374151; }
-        .header h1 { font-size: 2.25rem; font-weight: bold; color: #ffffff; }
-        .header h3 { font-size: 1.5rem; font-weight: 600; color: #d1d5db; margin-top: 0.25rem; }
-        .navigation { background-color: #1f2937; color: #d1d5db; position: sticky; top: 0; z-index: 40; }
+        .header { background-color: #ffffff; padding: 1rem; text-align: center; border-bottom: 1px solid #dee2e6; }
+        .header h1 { font-size: 2.25rem; font-weight: bold; color: #0d6efd; }
+        .header h3 { font-size: 1.5rem; font-weight: 600; color: #495057; margin-top: 0.25rem; }
+        .navigation { background-color: #ffffff; color: #495057; position: sticky; top: 0; z-index: 40; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; }
         .nav-links { display: flex; flex-wrap: wrap; }
-        .nav-button { padding: 1rem 0.5rem; font-weight: 500; transition: color 0.3s; background: none; border: none; color: #d1d5db; cursor: pointer; }
-        .nav-button:hover { color: #93c5fd; }
-        .nav-button.active { color: #60a5fa; border-bottom: 4px solid #60a5fa; }
-        .login-button { background-color: #16a34a; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 600; transition: background-color 0.3s; cursor: pointer; border: none;}
-        .login-button:hover { background-color: #15803d; }
-        .main-content { margin-top: 2rem; margin-bottom: 2rem; background-color: rgba(17, 24, 39, 0.8); backdrop-filter: blur(4px); border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); min-height: 60vh; border: 1px solid #374151; }
+        .nav-button { padding: 1rem 0.5rem; font-weight: 500; transition: color 0.3s; background: none; border: none; color: #495057; cursor: pointer; }
+        .nav-button:hover { color: #0d6efd; }
+        .nav-button.active { color: #0d6efd; border-bottom: 4px solid #0d6efd; }
+        .login-button { background-color: #198754; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 600; transition: background-color 0.3s; cursor: pointer; border: none;}
+        .login-button:hover { background-color: #157347; }
+        .main-content { margin-top: 2rem; margin-bottom: 2rem; background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); min-height: 60vh; border: 1px solid #dee2e6; }
         .page { padding: 2rem; }
-        .page-title { font-size: 1.875rem; font-weight: bold; text-align: center; margin-bottom: 2rem; color: #ffffff; }
+        .page-title { font-size: 1.875rem; font-weight: bold; text-align: center; margin-bottom: 2rem; color: #212529; }
         .card-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 2rem; }
         @media (min-width: 768px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { .card-grid { grid-template-columns: repeat(3, 1fr); } }
-        .card { background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s; cursor: pointer; }
-        .card:hover { transform: translateY(-0.5rem); }
+        .card { background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; border: 1px solid #e9ecef; }
+        .card:hover { transform: translateY(-0.5rem); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .card.text-left { text-align: left; }
         .card.text-right { text-align: right; }
         .card img { width: 8rem; height: 8rem; border-radius: 9999px; margin-left: auto; margin-right: auto; margin-bottom: 1rem; object-fit: cover; }
-        .card h3 { font-size: 1.25rem; font-weight: bold; color: #ffffff; }
-        .card p { color: #9ca3af; }
-        .list-item { background-color: #1f2937; padding: 1rem; border-radius: 0.375rem; cursor: pointer; transition: box-shadow 0.3s; }
-        .list-item:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 1.25rem; font-weight: bold; color: #212529; }
+        .card p { color: #6c757d; }
+        .list-item { background-color: #ffffff; padding: 1rem; border-radius: 0.375rem; cursor: pointer; transition: box-shadow 0.3s; border: 1px solid #e9ecef; }
+        .list-item:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .list-container { max-width: 56rem; margin: auto; display: flex; flex-direction: column; gap: 1rem; }
-        .footer { background-color: #111827; color: #9ca3af; text-align: center; padding: 1rem; }
-        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 50; }
-        .modal-content { background-color: #1f2937; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 42rem; position: relative; border: 1px solid #4b5563; }
-        .modal-close-button { position: absolute; top: 1rem; right: 1rem; color: #9ca3af; font-size: 1.875rem; font-weight: bold; cursor: pointer; }
-        .modal-close-button:hover { color: #ffffff; }
-        .modal-content h2 { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1rem; color: #ffffff; }
+        .footer { background-color: #f8f9fa; color: #6c757d; text-align: center; padding: 1rem; border-top: 1px solid #dee2e6;}
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 50; }
+        .modal-content { background-color: #ffffff; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 42rem; position: relative; border: 1px solid #dee2e6; color: #212529; }
+        .modal-close-button { position: absolute; top: 1rem; right: 1rem; color: #6c757d; font-size: 1.875rem; font-weight: bold; cursor: pointer; }
+        .modal-close-button:hover { color: #212529; }
+        .modal-content h2 { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 1rem; color: #212529; }
         .modal-content h4 { font-weight: 600; font-size: 1.125rem; margin-top: 1rem; }
-        .modal-content p { color: #d1d5db; margin-top: 0.25rem; }
-        .modal-content .divider { border-top: 1px solid #4b5563; margin-top: 1rem; padding-top: 1rem; }
-        .google-button { background-color: #ffffff; color: #1f2937; font-weight: bold; padding: 0.75rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: 1px solid #4b5563; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .google-button:hover { background-color: #e5e7eb; }
-        .gemini-button { background-color: #2563eb; color: white; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: none; cursor: pointer; width: 100%; }
-        .gemini-button:hover { background-color: #1d4ed8; }
-        .gemini-button:disabled { background-color: #4b5563; cursor: not-allowed; }
-        .form-input { width: 100%; padding: 0.5rem; border-radius: 0.375rem; background-color: #374151; color: white; border: 1px solid #4b5563; box-sizing: border-box; }
-        .form-label { display: block; color: #d1d5db; margin-bottom: 0.5rem; }
+        .modal-content p { color: #495057; margin-top: 0.25rem; }
+        .modal-content .divider { border-top: 1px solid #dee2e6; margin-top: 1rem; padding-top: 1rem; }
+        .google-button { background-color: #ffffff; color: #212529; font-weight: bold; padding: 0.75rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: 1px solid #ced4da; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .google-button:hover { background-color: #f8f9fa; }
+        .gemini-button { background-color: #0d6efd; color: white; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s; border: none; cursor: pointer; width: 100%; }
+        .gemini-button:hover { background-color: #0b5ed7; }
+        .gemini-button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .form-input { width: 100%; padding: 0.5rem; border-radius: 0.375rem; background-color: #f8f9fa; color: #212529; border: 1px solid #ced4da; box-sizing: border-box; }
+        .form-label { display: block; color: #495057; margin-bottom: 0.5rem; }
         .form-group { margin-bottom: 1rem; }
-        .delete-button { background-color: #dc2626; color: white; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; border: none; cursor: pointer; }
-        .delete-button:hover { background-color: #b91c1c; }
+        .delete-button { background-color: #dc3545; color: white; padding: 0.25rem 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; border: none; cursor: pointer; }
+        .delete-button:hover { background-color: #bb2d3b; }
+        .reorder-button { background: none; border: none; color: #6c757d; cursor: pointer; font-size: 1.5rem; }
+        .reorder-button:hover { color: #212529; }
+        .hero-section { padding: 4rem 1rem; text-align: center; background: linear-gradient(45deg, #0d6efd, #6610f2); border-radius: 0.5rem; }
+        .hero-section h2 { font-size: 2.5rem; font-weight: bold; color: white; }
+        .hero-section p { font-size: 1.125rem; color: rgba(255,255,255,0.8); max-width: 600px; margin: 1rem auto 0; }
+        .placement-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        .placement-table th, .placement-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6; }
+        .placement-table th { background-color: #f8f9fa; font-weight: 600; }
     </style>
     <!-- 2. Load React Libraries -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -96,10 +104,10 @@
         const AppContext = React.createContext();
 
         // --- HELPER COMPONENTS ---
-        const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics & Telecommunication</h3> </header> );
-        const Footer = () => ( <footer className="footer"> <p>Designed & Createdby Sarthak </p> </footer> );
-        const Spinner = () => (<div style={{display: 'flex', justifyContent: 'center', padding: '2rem'}}><div style={{animation: 'spin 1s linear infinite', width: '3rem', height: '3rem', borderRadius: '50%', borderTop: '4px solid #60a5fa', borderRight: '4px solid transparent'}}></div></div>);
-        const EmptyState = ({message}) => (<div style={{textAlign: 'center', padding: '2rem', color: '#9ca3af'}}><p>{message}</p></div>);
+        const Header = () => ( <header className="header"> <h1>ISBM College of Engineering</h1> <h3>Department of Electronics and Telecommunication</h3> </header> );
+        const Footer = () => ( <footer className="footer"> <p>Designed by Sarthak</p> </footer> );
+        const Spinner = () => (<div style={{display: 'flex', justifyContent: 'center', padding: '2rem'}}><div style={{animation: 'spin 1s linear infinite', width: '3rem', height: '3rem', borderRadius: '50%', borderTop: '4px solid #0d6efd', borderRight: '4px solid transparent'}}></div></div>);
+        const EmptyState = ({message}) => (<div style={{textAlign: 'center', padding: '2rem', color: '#6c757d'}}><p>{message}</p></div>);
 
         const Navigation = () => {
             const { currentPage, setCurrentPage, user, isAdmin, handleLogout, setShowLogin } = React.useContext(AppContext);
@@ -112,7 +120,7 @@
                             {isAdmin && <button onClick={() => setCurrentPage('Admin')} className={`nav-button ${currentPage === 'Admin' ? 'active' : ''}`}>Admin Panel</button>}
                         </div>
                         <div>
-                            {user ? (<button onClick={handleLogout} className="login-button" style={{backgroundColor: '#dc2626'}}>Logout</button>) : (<button onClick={() => setShowLogin(true)} className="login-button">Login</button>)}
+                            {user ? (<button onClick={handleLogout} className="login-button" style={{backgroundColor: '#dc3545'}}>Logout</button>) : (<button onClick={() => setShowLogin(true)} className="login-button">Login</button>)}
                         </div>
                     </div>
                 </nav>
@@ -124,13 +132,13 @@
             if (!item) return null;
             const renderContent = () => {
                 switch (type) {
-                    case 'faculty': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.designation}</p><div className="divider"><h4>Biography</h4><p>{item.bio}</p></div></div>);
-                    case 'topper': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#60a5fa'}}>{item.achievement}</p><div className="divider"><p>{item.details}</p></div></div>);
-                    case 'achievement': return (<div><h2>{item.title}</h2><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'faculty': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#0d6efd'}}>{item.designation}</p><div className="divider"><h4>Biography</h4><p>{item.bio}</p></div></div>);
+                    case 'topper': return (<div><img src={item.imageUrl} alt={item.name} className="card img" /><h2>{item.name}</h2><p style={{color: '#0d6efd'}}>{item.achievement}</p><div className="divider"><p>{item.details}</p></div></div>);
+                    case 'achievement': return (<div>{item.imageUrl && <img src={item.imageUrl} alt={item.title} style={{width: '100%', height: '12rem', objectFit: 'cover', borderRadius: '0.5rem', marginBottom: '1rem'}}/>}<h2>{item.title}</h2><div className="divider"><p>{item.details}</p></div></div>);
                     case 'gallery': return (<div><img src={item.url} alt={item.caption} style={{width: '100%', borderRadius: '0.5rem', marginBottom: '1rem'}}/><p style={{textAlign: 'center'}}>{item.caption}</p></div>);
                     case 'club': return (<div><h2>{item.name}</h2><div className="divider"><h4>About</h4><p>{item.description}</p></div><div className="divider"><h4>Activities</h4><p>{item.activities}</p></div></div>);
                     case 'project': return (<div><img src={item.imageUrl} alt={item.title} style={{width: '100%', height: '12rem', objectFit: 'cover', borderRadius: '0.5rem', marginBottom: '1rem'}}/><h2>{item.title}</h2><div className="divider"><h4>Description</h4><p>{item.description}</p></div><div className="divider"><h4>Team</h4><p>{item.team}</p></div></div>);
-                    case 'publication': return (<div><h2>{item.title}</h2><p style={{color: '#9ca3af', fontSize: '0.875rem'}}>{item.authors} ({item.year})</p><div className="divider"><h4>Abstract</h4><p>{item.abstract}</p></div><div className="divider"><button onClick={() => summarizeAbstract(item.abstract)} disabled={geminiLoading} className="gemini-button">{geminiLoading ? 'Summarizing...' : '✨ Summarize Abstract'}</button>{geminiSummary && (<div style={{marginTop: '1rem', padding: '1rem', backgroundColor: '#374151', borderRadius: '0.5rem'}}><h5>Simplified Summary:</h5><p>{geminiSummary}</p></div>)}</div></div>);
+                    case 'publication': return (<div><h2>{item.title}</h2><p style={{color: '#6c757d', fontSize: '0.875rem'}}>{item.authors} ({item.year})</p><div className="divider"><h4>Abstract</h4><p>{item.abstract}</p></div><div className="divider"><button onClick={() => summarizeAbstract(item.abstract)} disabled={geminiLoading} className="gemini-button">{geminiLoading ? 'Summarizing...' : '✨ Summarize Abstract'}</button>{geminiSummary && (<div style={{marginTop: '1rem', padding: '1rem', backgroundColor: '#f8f9fa', borderRadius: '0.5rem', border: '1px solid #dee2e6'}}><h5>Simplified Summary:</h5><p>{geminiSummary}</p></div>)}</div></div>);
                     default: return <p>Details not available.</p>;
                 }
             };
@@ -167,27 +175,27 @@
                         {view === 'login' ? (
                             <>
                                 <h2>Department Login</h2>
-                                {error && <p style={{color: '#f87171', textAlign: 'center'}}>{error}</p>}
+                                {error && <p style={{color: '#dc3545', textAlign: 'center'}}>{error}</p>}
                                 <button onClick={handleGoogleLogin} className="google-button">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C42.022,36.218,44,30.668,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
                                     Sign in with Google
                                 </button>
-                                <div className="divider" style={{textAlign: 'center', color: '#9ca3af'}}>OR</div>
+                                <div className="divider" style={{textAlign: 'center', color: '#6c757d'}}>OR</div>
                                 <form onSubmit={onLogin}>
                                     <div className="form-group"><label className="form-label">Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="form-input" required /></div>
                                     <div className="form-group"><label className="form-label">Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} className="form-input" required /></div>
-                                    <div style={{textAlign: 'right', marginBottom: '1rem'}}><button type="button" onClick={() => setView('reset')} style={{color: '#60a5fa', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem'}}>Forgot Password?</button></div>
-                                    <div style={{display: 'flex', justifyContent: 'space-between'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Login with Email</button><button type="button" onClick={onClose} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
+                                    <div style={{textAlign: 'right', marginBottom: '1rem'}}><button type="button" onClick={() => setView('reset')} style={{color: '#0d6efd', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem'}}>Forgot Password?</button></div>
+                                    <div style={{display: 'flex', justifyContent: 'space-between'}}><button type="submit" className="login-button" style={{backgroundColor: '#0d6efd'}}>Login with Email</button><button type="button" onClick={onClose} style={{color: '#6c757d', background: 'none', border: 'none', cursor: 'pointer'}}>Cancel</button></div>
                                 </form>
                             </>
                         ) : (
                              <>
                                 <h2>Reset Password</h2>
-                                {error && <p style={{color: '#f87171', textAlign: 'center'}}>{error}</p>}
-                                {message && <p style={{color: '#4ade80', textAlign: 'center'}}>{message}</p>}
+                                {error && <p style={{color: '#dc3545', textAlign: 'center'}}>{error}</p>}
+                                {message && <p style={{color: '#198754', textAlign: 'center'}}>{message}</p>}
                                 <form onSubmit={onPasswordReset}>
                                     <div className="form-group"><label className="form-label">Enter your account email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="form-input" required /></div>
-                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send Reset Link</button><button type="button" onClick={() => setView('login')} style={{color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer'}}>Back to Login</button></div>
+                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#0d6efd'}}>Send Reset Link</button><button type="button" onClick={() => setView('login')} style={{color: '#6c757d', background: 'none', border: 'none', cursor: 'pointer'}}>Back to Login</button></div>
                                 </form>
                             </>
                         )}
@@ -210,7 +218,7 @@
                             <input type="text" value={keywords} onChange={e => setKeywords(e.target.value)} className="form-input" placeholder="machine learning, signal processing..." />
                             <button type="submit" disabled={geminiLoading} className="gemini-button" style={{marginTop: '1rem'}}>{geminiLoading ? 'Generating...' : 'Generate Ideas'}</button>
                         </form>
-                        {geminiIdeas && (<div className="divider"><h4>Generated Ideas:</h4><div style={{whiteSpace: 'pre-wrap', backgroundColor: '#374151', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem'}}>{geminiIdeas}</div></div>)}
+                        {geminiIdeas && (<div className="divider"><h4>Generated Ideas:</h4><div style={{whiteSpace: 'pre-wrap', backgroundColor: '#f8f9fa', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem', border: '1px solid #dee2e6'}}>{geminiIdeas}</div></div>)}
                     </div>
                 </div>
             );
@@ -237,19 +245,50 @@
 
             return (
                 <div className="page">
-                    <div className="text-center mb-12"><h2 className="page-title" style={{ marginBottom: '0.5rem' }}>Welcome to the ENTC Department</h2><p className="text-gray-400 mt-2">A hub of innovation and excellence in engineering.</p></div>
-                    <div style={{ textAlign: 'center', margin: '2rem 0', padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem' }}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa', marginBottom: '1rem'}}>Department Booklet</h3><a href="https://online.flippingbook.com/view/935750571/" className="fbo-embed" data-fbo-id="adf64cce6b" data-fbo-ratio="3:2" data-fbo-lightbox="yes" data-fbo-width="100%" data-fbo-height="auto" data-fbo-version="1" style={{ maxWidth: '100%', fontSize: '1.1rem', color: '#93c5fd', textDecoration: 'underline' }}>View the ENTC Department Booklet</a></div>
-                    <div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6', marginTop: '2rem'}}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3><p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p></div>
+                    <div className="hero-section">
+                        <h2>Innovating the Future of Communication</h2>
+                        <p>Welcome to the Department of Electronics and Telecommunication at ISB&M College of Engineering, where we empower students to become leaders in technology.</p>
+                    </div>
+                    <div style={{ textAlign: 'center', margin: '2rem 0', padding: '1.5rem', backgroundColor: '#ffffff', borderRadius: '0.5rem', border: '1px solid #dee2e6' }}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#0d6efd', marginBottom: '1rem'}}>Department Booklet</h3><a href="https://online.flippingbook.com/view/935750571/" className="fbo-embed" data-fbo-id="adf64cce6b" data-fbo-ratio="3:2" data-fbo-lightbox="yes" data-fbo-width="100%" data-fbo-height="auto" data-fbo-version="1" style={{ maxWidth: '100%', fontSize: '1.1rem', color: '#0d6efd', textDecoration: 'underline' }}>View the ENTC Department Booklet</a></div>
                 </div>
             );
         };
-        const ToppersPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.toppers) return <Spinner />; if (data.toppers.length === 0) return <EmptyState message="No toppers to display." />; return (<div className="page"><h2 className="page-title">Department Toppers</h2><div className="card-grid">{data.toppers.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'topper')}><img src={item.imageUrl} alt={item.name} style={{borderColor: '#f59e0b'}} /><h3>{item.name}</h3><p style={{color: '#f59e0b', fontWeight: 'bold'}}>{item.achievement}</p></div>))}</div></div>); };
-        const AchievementsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.achievements) return <Spinner />; if (data.achievements.length === 0) return <EmptyState message="No achievements to display." />; return (<div className="page"><h2 className="page-title">Our Achievements</h2><div className="list-container">{data.achievements.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'achievement')}><p style={{fontWeight: 600, color: '#60a5fa'}}>{item.title}</p></div>))}</div></div>); };
-        const FacultyPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.faculty) return <Spinner />; if (data.faculty.length === 0) return <EmptyState message="No faculty to display." />; return (<div className="page"><h2 className="page-title">Our Faculty</h2><div className="card-grid">{data.faculty.map(item => (<div key={item.id} className={`card ${item.alignment || 'text-center'}`} onClick={() => showDetails(item, 'faculty')}><img src={item.imageUrl} alt={item.name} /><h3>{item.name}</h3><p style={{color: '#60a5fa'}}>{item.designation}</p></div>))}</div></div>); };
-        const PlacementsPage = () => { return (<div className="page"><h2 className="page-title">Placement Highlights</h2><div style={{display: 'flex', justifyContent: 'center', gap: '2rem'}}><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#60a5fa'}}>18 LPA</p><p>Highest Package</p></div><div className="card"><p style={{fontSize: '2.25rem', fontWeight: 'bold', color: '#34d399'}}>6.5 LPA</p><p>Average Package</p></div></div></div>); };
+        const ToppersPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.toppers) return <Spinner />; if (data.toppers.length === 0) return <EmptyState message="No toppers to display." />; return (<div className="page"><h2 className="page-title">Department Toppers</h2><div className="card-grid">{data.toppers.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'topper')}><img src={item.imageUrl} alt={item.name} style={{borderColor: '#fd7e14'}} /><h3>{item.name}</h3><p style={{color: '#fd7e14', fontWeight: 'bold'}}>{item.achievement}</p></div>))}</div></div>); };
+        const AchievementsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.achievements) return <Spinner />; if (data.achievements.length === 0) return <EmptyState message="No achievements to display." />; return (<div className="page"><h2 className="page-title">Our Achievements</h2><div className="list-container">{data.achievements.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'achievement')}><p style={{fontWeight: 600, color: '#0d6efd'}}>{item.title}</p></div>))}</div></div>); };
+        const FacultyPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.faculty) return <Spinner />; if (data.faculty.length === 0) return <EmptyState message="No faculty to display." />; return (<div className="page"><h2 className="page-title">Our Faculty</h2><div className="card-grid">{data.faculty.map(item => (<div key={item.id} className={`card ${item.alignment || 'text-center'}`} onClick={() => showDetails(item, 'faculty')}><img src={item.imageUrl} alt={item.name} /><h3>{item.name}</h3><p style={{color: '#0d6efd'}}>{item.designation}</p></div>))}</div></div>); };
+        const PlacementsPage = () => { 
+            const { data } = React.useContext(AppContext);
+            if (!data.placements) return <Spinner />;
+            if (data.placements.length === 0) return <EmptyState message="Placement data will be updated soon." />;
+            return (
+                <div className="page">
+                    <h2 className="page-title">Placement Records</h2>
+                    <table className="placement-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Company</th>
+                                <th>Location</th>
+                                <th>Year</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.placements.map(item => (
+                                <tr key={item.id}>
+                                    <td>{item.name}</td>
+                                    <td>{item.company}</td>
+                                    <td>{item.location}</td>
+                                    <td>{item.year}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        };
         const GalleryPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.galleryImages) return <Spinner />; if (data.galleryImages.length === 0) return <EmptyState message="No images in the gallery." />; return (<div className="page"><h2 className="page-title">Photo Gallery</h2><div className="card-grid" style={{gridTemplateColumns: 'repeat(4, 1fr)'}}>{data.galleryImages.map(item => (<div key={item.id} className="card" style={{padding: 0}} onClick={() => showDetails(item, 'gallery')}><img src={item.url} alt={item.caption} style={{width: '100%', height: '100%', borderRadius: '0.5rem', objectFit: 'cover'}} /></div>))}</div></div>); };
-        const ClubsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.clubs) return <Spinner />; if (data.clubs.length === 0) return <EmptyState message="No clubs to display." />; return (<div className="page"><h2 className="page-title">Student Clubs</h2><div className="list-container">{data.clubs.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'club')}><h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>{item.name}</h3><p>{item.description}</p></div>))}</div></div>); };
-        const ProjectsPage = () => { const { data, showDetails, setShowProjectGenerator } = React.useContext(AppContext); if (!data.projects) return <Spinner />; return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}><h2 className="page-title" style={{marginBottom: 0}}>Student Projects</h2><button onClick={() => setShowProjectGenerator(true)} className="gemini-button" style={{width: 'auto'}}>✨ Get Project Ideas</button></div>{data.projects.length === 0 ? <EmptyState message="No projects to display." /> : <div className="card-grid">{data.projects.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'project')}><img src={item.imageUrl} alt={item.title} style={{borderRadius: '0.5rem'}} /><h3>{item.title}</h3></div>))}</div>}</div>); };
+        const ClubsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.clubs) return <Spinner />; if (data.clubs.length === 0) return <EmptyState message="No clubs to display." />; return (<div className="page"><h2 className="page-title">Student Clubs</h2><div className="list-container">{data.clubs.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'club')}><h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#0d6efd'}}>{item.name}</h3><p>{item.description}</p></div>))}</div></div>); };
+        const ProjectsPage = () => { const { data, showDetails, setShowProjectGenerator } = React.useContext(AppContext); if (!data.projects) return <Spinner />; return (<div className="page"><div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}><h2 className="page-title" style={{marginBottom: 0}}>Student Projects</h2><button onClick={() => setShowProjectGenerator(true)} className="gemini-button" style={{width: 'auto'}}>✨ Get Project Ideas</button></div>{data.projects.length === 0 ? <EmptyState message="No projects to display." /> : <div className="card-grid">{data.projects.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'project')}><img src={item.imageUrl} alt={item.title} style={{borderRadius: '0.5rem', width: '100%', height: '10rem', objectFit: 'cover'}} /><h3>{item.title}</h3></div>))}</div>}</div>); };
         const PublicationsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.publications) return <Spinner />; if (data.publications.length === 0) return <EmptyState message="No publications to display." />; return (<div className="page"><h2 className="page-title">Publications</h2><div className="list-container">{data.publications.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'publication')}><p style={{fontWeight: 600}}>{item.title}</p></div>))}</div></div>); };
         
         const ContactPage = () => {
@@ -265,19 +304,19 @@
 
             return (
                 <div className="page">
-                    <h2 className="page-title">Feedback / Contact Us</h2>
+                    <h2 className="page-title">Contact Us</h2>
                     <form className="list-container" ref={formRef} style={{gap: '1rem'}} onSubmit={handleSubmit}>
                         <div className="form-group"><label className="form-label">Name</label><input type="text" className="form-input" onChange={e => setFormData(prev => ({...prev, name: e.target.value}))} required /></div>
                         <div className="form-group"><label className="form-label">Email</label><input type="email" className="form-input" onChange={e => setFormData(prev => ({...prev, email: e.target.value}))} required /></div>
                         <div className="form-group"><label className="form-label">Message</label><textarea rows="5" className="form-input" onChange={e => setFormData(prev => ({...prev, message: e.target.value}))} required></textarea></div>
-                        <div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#2563eb'}}>Send Message</button></div>
+                        <div style={{textAlign: 'center'}}><button type="submit" className="login-button" style={{backgroundColor: '#0d6efd'}}>Send Message</button></div>
                     </form>
                 </div>
             );
         };
         
         const AdminPage = () => {
-            const { data, addData, deleteData } = React.useContext(AppContext);
+            const { data, addData, deleteData, handleReorder } = React.useContext(AppContext);
             const [collection, setCollection] = React.useState('faculty');
             const [formData, setFormData] = React.useState({});
             const formRef = React.useRef();
@@ -301,7 +340,8 @@
                     galleryImages: ['url', 'caption', 'order'],
                     projects: ['title', 'description', 'imageUrl', 'team', 'technologies', 'order'],
                     toppers: ['name', 'batch', 'achievement', 'imageUrl', 'details', 'order'],
-                    achievements: ['title', 'description', 'details', 'order']
+                    achievements: ['title', 'description', 'details', 'imageUrl', 'order'],
+                    placements: ['name', 'company', 'location', 'year', 'order']
                 };
 
                 return (fields[collection] || []).map(field => {
@@ -320,7 +360,7 @@
                     return (
                         <div className="form-group" key={field}>
                             <label className="form-label">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                            <input type={field === 'order' ? 'number' : 'text'} className="form-input" onChange={e => setFormData(prev => ({...prev, [field]: e.target.value}))} />
+                            <input type={field === 'order' || field === 'year' ? 'number' : 'text'} className="form-input" onChange={e => setFormData(prev => ({...prev, [field]: e.target.value}))} />
                         </div>
                     );
                 });
@@ -331,10 +371,14 @@
                 if (items.length === 0) return <EmptyState message={`No items in ${collection} yet.`} />;
                 return (
                     <div className="list-container" style={{marginTop: '2rem'}}>
-                        {items.map(item => (
+                        {items.map((item, index) => (
                             <div key={item.id} className="list-item" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <p>{item.name || item.title || item.caption}</p>
-                                <button onClick={() => handleDelete(item.id)} className="delete-button">Delete</button>
+                                <span>{item.name || item.title || item.caption}</span>
+                                <div>
+                                    <button onClick={() => handleReorder(collection, index, 'up')} className="reorder-button" disabled={index === 0}>&uarr;</button>
+                                    <button onClick={() => handleReorder(collection, index, 'down')} className="reorder-button" disabled={index === items.length - 1}>&darr;</button>
+                                    <button onClick={() => handleDelete(collection, item.id)} className="delete-button" style={{marginLeft: '1rem'}}>Delete</button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -346,7 +390,7 @@
                     <h2 className="page-title">Admin Panel</h2>
                     <div className="list-container">
                         <div className="list-item">
-                            <h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>Add New Content</h3>
+                            <h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#0d6efd'}}>Add New Content</h3>
                             <form onSubmit={handleAdd} ref={formRef}>
                                 <div className="form-group">
                                     <label className="form-label">Select Collection</label>
@@ -356,14 +400,22 @@
                                         <option value="projects">Project</option>
                                         <option value="toppers">Topper</option>
                                         <option value="achievements">Achievement</option>
+                                        <option value="placements">Placement</option>
                                     </select>
                                 </div>
                                 {renderForm()}
-                                <button type="submit" className="login-button" style={{backgroundColor: '#2563eb', width: '100%'}}>Add Content</button>
+                                <div className="form-group">
+                                    <label className="form-label">Placement</label>
+                                    <select className="form-input" onChange={e => setFormData(prev => ({...prev, placement: e.target.value}))}>
+                                        <option value="bottom">Add to Bottom</option>
+                                        <option value="top">Add to Top</option>
+                                    </select>
+                                </div>
+                                <button type="submit" className="login-button" style={{backgroundColor: '#0d6efd', width: '100%'}}>Add Content</button>
                             </form>
                         </div>
                         <div className="list-item">
-                            <h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa'}}>Manage Existing Content</h3>
+                            <h3 style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#0d6efd'}}>Manage Existing Content</h3>
                             {renderManagementList()}
                         </div>
                     </div>
@@ -402,7 +454,7 @@
             // --- DATA FETCHING ---
             React.useEffect(() => {
                 if (!db) return;
-                const collections = ['toppers', 'achievements', 'faculty', 'galleryImages', 'clubs', 'projects', 'publications'];
+                const collections = ['toppers', 'achievements', 'faculty', 'galleryImages', 'clubs', 'projects', 'publications', 'placements'];
                 const unsubscribers = collections.map(col => {
                     return db.collection(col).orderBy("order", "asc").onSnapshot(snapshot => {
                         const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -436,7 +488,20 @@
             
             const addData = async (collectionName, newData) => {
                 if (!db || !isAdmin) return;
-                let finalData = { ...newData, order: Number(newData.order || 0) };
+
+                const items = data[collectionName] || [];
+                let newOrder;
+
+                if (newData.placement === 'top') {
+                    const minOrder = items.length > 0 ? Math.min(...items.map(i => i.order)) : 0;
+                    newOrder = minOrder - 1;
+                } else { // Default to bottom
+                    const maxOrder = items.length > 0 ? Math.max(...items.map(i => i.order)) : 0;
+                    newOrder = maxOrder + 1;
+                }
+                
+                const finalData = { ...newData, order: newOrder };
+                delete finalData.placement;
                 
                 db.collection(collectionName).add(finalData)
                     .then(() => alert('Data added successfully!'))
@@ -448,6 +513,25 @@
                 db.collection(collectionName).doc(docId).delete()
                     .then(() => alert('Item deleted successfully!'))
                     .catch(error => console.error("Error deleting document: ", error));
+            };
+
+            const handleReorder = (collectionName, index, direction) => {
+                const items = data[collectionName];
+                if (!items || items.length < 2) return;
+
+                const itemA = items[index];
+                const itemB = direction === 'up' ? items[index - 1] : items[index + 1];
+
+                if (!itemA || !itemB) return;
+
+                const batch = db.batch();
+                const docA = db.collection(collectionName).doc(itemA.id);
+                const docB = db.collection(collectionName).doc(itemB.id);
+
+                batch.update(docA, { order: itemB.order });
+                batch.update(docB, { order: itemA.order });
+
+                batch.commit().catch(err => console.error("Reorder failed:", err));
             };
 
             const handleContactSubmit = (formData) => {
@@ -464,7 +548,7 @@
                 setGeminiLoading(true);
                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
-                const apiKey = "AIzaSyDL8mVtumX8KvgGE06vFvEnzQt03iME_6M"; 
+                const apiKey = ""; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -516,7 +600,7 @@
                 }
             };
             
-            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, deleteData, setShowLogin, handleLogin, handleGoogleLogin, handlePasswordReset, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading, handleContactSubmit };
+            const contextValue = { currentPage, setCurrentPage, user, isAdmin, handleLogout, data, showDetails, addData, deleteData, handleReorder, setShowLogin, handleLogin, handleGoogleLogin, handlePasswordReset, setShowProjectGenerator, generateProjectIdeas, geminiIdeas, summarizeAbstract, geminiSummary, geminiLoading, handleContactSubmit };
 
             return (
                 <AppContext.Provider value={contextValue}>
