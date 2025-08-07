@@ -66,6 +66,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
 </head>
 <body>
@@ -84,11 +85,12 @@
         };
 
         // Initialize Firebase
-        let app, auth, db;
+        let app, auth, db, storage;
         try {
             app = firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
             db = firebase.firestore();
+            storage = firebase.storage();
         } catch (e) {
             console.error("Firebase initialization failed. Please check your config.", e);
         }
@@ -217,7 +219,47 @@
         };
 
         // --- PAGE COMPONENTS ---
-        const HomePage = () => (<div className="page"><h2 className="page-title">Welcome to the ENTC Department</h2><div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6'}}><h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3><p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p></div></div>);
+        const HomePage = () => {
+            React.useEffect(() => {
+                const scriptId = 'flippingbook-script';
+                if (document.getElementById(scriptId)) return; // Avoid adding script multiple times
+                
+                const script = document.createElement('script');
+                script.id = scriptId;
+                script.src = "https://online.flippingbook.com/EmbedScriptUrl.aspx?m=redir&hid=935750571";
+                script.async = true;
+                script.defer = true;
+                document.body.appendChild(script);
+
+                return () => {
+                    const existingScript = document.getElementById(scriptId);
+                    if (existingScript) {
+                        document.body.removeChild(existingScript);
+                    }
+                };
+            }, []);
+
+            return (
+                <div className="page">
+                    <div className="text-center mb-12">
+                        <h2 className="page-title" style={{ marginBottom: '0.5rem' }}>Welcome to the ENTC Department</h2>
+                        <p className="text-gray-400 mt-2">A hub of innovation and excellence in engineering.</p>
+                    </div>
+
+                    <div style={{ textAlign: 'center', margin: '2rem 0', padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem' }}>
+                         <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa', marginBottom: '1rem'}}>Department Booklet</h3>
+                        <a href="https://online.flippingbook.com/view/935750571/" className="fbo-embed" data-fbo-id="adf64cce6b" data-fbo-ratio="3:2" data-fbo-lightbox="yes" data-fbo-width="100%" data-fbo-height="auto" data-fbo-version="1" style={{ maxWidth: '100%', fontSize: '1.1rem', color: '#93c5fd', textDecoration: 'underline' }}>
+                            View the ENTC Department Booklet
+                        </a>
+                    </div>
+
+                    <div style={{padding: '1.5rem', backgroundColor: '#1f2937', borderRadius: '0.5rem', borderLeft: '4px solid #3b82f6', marginTop: '2rem'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', color: '#60a5fa'}}>About This Portal</h3>
+                        <p style={{marginTop: '0.5rem', color: '#d1d5db'}}>This portal is a central hub for the Electronics and Telecommunication department. Use the navigation bar above to explore the various sections.</p>
+                    </div>
+                </div>
+            );
+        };
         const ToppersPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.toppers) return <Spinner />; if (data.toppers.length === 0) return <EmptyState message="No toppers to display." />; return (<div className="page"><h2 className="page-title">Department Toppers</h2><div className="card-grid">{data.toppers.map(item => (<div key={item.id} className="card" onClick={() => showDetails(item, 'topper')}><img src={item.imageUrl} alt={item.name} style={{borderColor: '#f59e0b'}} /><h3>{item.name}</h3><p style={{color: '#f59e0b', fontWeight: 'bold'}}>{item.achievement}</p></div>))}</div></div>); };
         const AchievementsPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.achievements) return <Spinner />; if (data.achievements.length === 0) return <EmptyState message="No achievements to display." />; return (<div className="page"><h2 className="page-title">Our Achievements</h2><div className="list-container">{data.achievements.map(item => (<div key={item.id} className="list-item" onClick={() => showDetails(item, 'achievement')}><p style={{fontWeight: 600, color: '#60a5fa'}}>{item.title}</p></div>))}</div></div>); };
         const FacultyPage = () => { const { data, showDetails } = React.useContext(AppContext); if (!data.faculty) return <Spinner />; if (data.faculty.length === 0) return <EmptyState message="No faculty to display." />; return (<div className="page"><h2 className="page-title">Our Faculty</h2><div className="card-grid">{data.faculty.map(item => (<div key={item.id} className={`card ${item.alignment || 'text-center'}`} onClick={() => showDetails(item, 'faculty')}><img src={item.imageUrl} alt={item.name} /><h3>{item.name}</h3><p style={{color: '#60a5fa'}}>{item.designation}</p></div>))}</div></div>); };
@@ -255,12 +297,14 @@
             const { data, addData, deleteData } = React.useContext(AppContext);
             const [collection, setCollection] = React.useState('faculty');
             const [formData, setFormData] = React.useState({});
+            const [file, setFile] = React.useState(null);
             const formRef = React.useRef();
 
             const handleAdd = (e) => {
                 e.preventDefault();
-                addData(collection, formData);
+                addData(collection, formData, file);
                 setFormData({});
+                setFile(null);
                 formRef.current.reset();
             };
 
@@ -278,7 +322,17 @@
                     toppers: ['name', 'batch', 'achievement', 'imageUrl', 'details', 'order'],
                     achievements: ['title', 'description', 'details', 'order']
                 };
+                const imageField = collection === 'faculty' || collection === 'projects' || collection === 'toppers' ? 'imageUrl' : 'url';
+
                 return (fields[collection] || []).map(field => {
+                    if (field === 'imageUrl' || field === 'url') {
+                        return (
+                             <div className="form-group" key={field}>
+                                <label className="form-label">Image File</label>
+                                <input type="file" className="form-input" onChange={e => setFile(e.target.files[0])} />
+                            </div>
+                        )
+                    }
                     if (field === 'alignment') {
                         return (
                             <div className="form-group" key={field}>
@@ -302,6 +356,7 @@
 
             const renderManagementList = () => {
                 const items = data[collection] || [];
+                if (items.length === 0) return <EmptyState message={`No items in ${collection} yet.`} />;
                 return (
                     <div className="list-container" style={{marginTop: '2rem'}}>
                         {items.map(item => (
@@ -407,9 +462,35 @@
             };
             const handleLogout = () => auth.signOut();
             
-            const addData = (collectionName, newData) => {
+            const handleFileUpload = async (file) => {
+                if (!storage || !file) return null;
+                const storageRef = storage.ref();
+                const fileRef = storageRef.child(`images/${Date.now()}_${file.name}`);
+                try {
+                    await fileRef.put(file);
+                    const url = await fileRef.getDownloadURL();
+                    return url;
+                } catch(error) {
+                    console.error("Error uploading file:", error);
+                    return null;
+                }
+            };
+
+            const addData = async (collectionName, newData, file) => {
                 if (!db || !isAdmin) return;
-                db.collection(collectionName).add({ ...newData, order: Number(newData.order || 0) })
+                let finalData = { ...newData, order: Number(newData.order || 0) };
+                
+                if (file) {
+                    const imageUrl = await handleFileUpload(file);
+                    if (!imageUrl) {
+                        alert('File upload failed!');
+                        return;
+                    }
+                    const imageField = collectionName === 'galleryImages' ? 'url' : 'imageUrl';
+                    finalData[imageField] = imageUrl;
+                }
+
+                db.collection(collectionName).add(finalData)
                     .then(() => alert('Data added successfully!'))
                     .catch(error => console.error("Error adding document: ", error));
             };
