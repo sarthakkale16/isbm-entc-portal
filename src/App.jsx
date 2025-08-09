@@ -1,16 +1,16 @@
 import React, { useState, useEffect, createContext, useContext, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut } from 'firebase/auth';
-import { getFirestore, collection, onSnapshot, orderBy, addDoc, deleteDoc, doc, writeBatch } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, orderBy, addDoc, deleteDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
 
 // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
 const firebaseConfig = {
     apiKey: "AIzaSyAZuvDbyQPecbyU1GT_yzm69_dY9dCGHdA",
-            authDomain: "isbm-entc-portal.firebaseapp.com",
-            projectId: "isbm-entc-portal",
-            storageBucket: "isbm-entc-portal.firebasestorage.app",
-            messagingSenderId: "296669265467",
-            appId: "1:296669265467:web:162438d50a2413bed2e61e"
+    authDomain: "isbm-entc-portal.firebaseapp.com",
+    projectId: "isbm-entc-portal",
+    storageBucket: "isbm-entc-portal.firebasestorage.app",
+    messagingSenderId: "296669265467",
+    appId: "1:296669265467:web:162438d50a2413bed2e61e"
 };
 
 // Initialize Firebase
@@ -358,13 +358,12 @@ function App() {
     // --- AUTHENTICATION ---
     useEffect(() => {
         if (!auth) return;
-        const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             setUser(firebaseUser);
             if (firebaseUser) {
                 const adminRef = doc(db, 'admins', firebaseUser.uid);
-                // This is a simplified check. In a real app, you'd use getDoc.
-                // For this standalone file, we'll assume the check happens and we manage state.
-                // To test admin, you must manually set it in Firestore.
+                const docSnap = await getDoc(adminRef);
+                setIsAdmin(docSnap.exists());
             } else {
                 setIsAdmin(false);
             }
@@ -428,11 +427,17 @@ function App() {
     };
 
     const deleteData = async (collectionName, docId) => {
-        if (!db || !isAdmin) return;
+        if (!db || !isAdmin) {
+            alert("Permission denied. You must be an admin to delete content.");
+            return;
+        }
         try {
             await deleteDoc(doc(db, collectionName, docId));
             alert('Item deleted successfully!');
-        } catch (error) { console.error("Error deleting document: ", error); }
+        } catch (error) {
+            console.error("Error deleting document: ", error);
+            alert(`Failed to delete item. Firestore security rules may have denied the request. Error: ${error.message}`);
+        }
     };
 
     const handleReorder = async (collectionName, index, direction) => {
@@ -467,7 +472,7 @@ function App() {
         setGeminiLoading(true);
         let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
         const payload = { contents: chatHistory };
-        const apiKey = ""; 
+        const apiKey = "YOUR_GEMINI_API_KEY"; // Replace with your key
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
         try {
             const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
