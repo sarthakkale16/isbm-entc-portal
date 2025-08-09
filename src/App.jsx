@@ -5,12 +5,12 @@ import { getFirestore, collection, onSnapshot, orderBy, addDoc, deleteDoc, doc, 
 
 // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAZuvDbyQPecbyU1GT_yzm69_dY9dCGHdA",
+            authDomain: "isbm-entc-portal.firebaseapp.com",
+            projectId: "isbm-entc-portal",
+            storageBucket: "isbm-entc-portal.firebasestorage.app",
+            messagingSenderId: "296669265467",
+            appId: "1:296669265467:web:162438d50a2413bed2e61e"
 };
 
 // Initialize Firebase
